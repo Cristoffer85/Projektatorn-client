@@ -7,6 +7,8 @@
           *ngFor="let friend of friends"
           class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
           [class.active]="selectedFriend === friend.username"
+          [class.bg-danger]="hasUnreadFrom(friend.username)"
+          [class.text-white]="hasUnreadFrom(friend.username)"
           (click)="selectFriend(friend)"
           style="cursor:pointer"
         >

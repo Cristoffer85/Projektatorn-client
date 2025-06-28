@@ -29,6 +29,7 @@ export class ChatComponent implements OnInit {
   allUsers: any[] = [];
   outgoingRequests: string[] = [];
   friendRequests: any[] = [];
+  unreadSenders: string[] = [];
 
   ngOnInit() {
     this.username = this.auth.getUsername();
@@ -40,10 +41,14 @@ export class ChatComponent implements OnInit {
         this.allUsers = users.filter(u => u.username !== this.username);
       });
       this.friendshipService.getOutgoingRequests(this.username).subscribe(reqs => {
-        this.outgoingRequests = reqs.map(r => r.username || r); // adjust as per DTO
+        this.outgoingRequests = reqs.map(r => r.username || r);
       });
       this.friendshipService.getFriendRequests(this.username).subscribe(reqs => {
         this.friendRequests = reqs;
+      });
+      // Fetch unread senders
+      this.chatService.getUnreadMessagesSenders(this.username).subscribe(senders => {
+        this.unreadSenders = senders;
       });
     }
   }
@@ -54,6 +59,10 @@ export class ChatComponent implements OnInit {
 
   get filteredAllUsers() {
     return this.allUsers.filter(u => !this.isFriend(u.username));
+  }
+
+  hasUnreadFrom(username: string): boolean {
+    return this.unreadSenders.includes(username);
   }
 
   hasOutgoingRequest(username: string): boolean {
@@ -86,6 +95,8 @@ export class ChatComponent implements OnInit {
     if (this.username && this.selectedFriend) {
       this.chatService.getMessagesBetweenUsers(this.username, this.selectedFriend, this.username).subscribe(msgs => {
         this.messages = msgs;
+        // Remove the unread indicator for this friend instantly
+        this.unreadSenders = this.unreadSenders.filter(u => u !== this.selectedFriend);
       });
     }
   }
