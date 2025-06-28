@@ -7,8 +7,4 @@ import { CommonModule } from '@angular/common';
   imports: [CommonModule],
   templateUrl: './home.component.html'
 })
-export class HomeComponent {
-  get isLoggedIn(): boolean {
-    return !!localStorage.getItem('token');
-  }
-}
+export class HomeComponent {}
