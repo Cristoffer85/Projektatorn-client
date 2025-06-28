@@ -24,7 +24,7 @@
     <div class="mb-4">
       <h6>All Users</h6>
       <ul class="list-group">
-        <li *ngFor="let user of allUsers" class="list-group-item d-flex justify-content-between align-items-center">
+        <li *ngFor="let user of filteredAllUsers" class="list-group-item d-flex justify-content-between align-items-center">
           {{ user.username }}
           <button
             class="btn btn-sm btn-outline-primary"

@@ -52,6 +52,10 @@ export class ChatComponent implements OnInit {
     return this.friends.some(f => f.username === username);
   }
 
+  get filteredAllUsers() {
+    return this.allUsers.filter(u => !this.isFriend(u.username));
+  }
+
   hasOutgoingRequest(username: string): boolean {
     return this.outgoingRequests.includes(username);
   }
