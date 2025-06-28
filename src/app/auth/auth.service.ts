@@ -10,7 +10,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  // Token management
+  // ############## Token management ##############
   getToken(): string | null {
     return localStorage.getItem('token');
   }
@@ -27,7 +27,7 @@ export class AuthService {
     }
   }
 
-  // Auth actions
+  // ############## Auth actions ##############
   register(username: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/auth/register`, { username, password });
   }
@@ -40,7 +40,7 @@ export class AuthService {
     localStorage.removeItem('token');
   }
 
-  // User info
+  // ############## User info ##############
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
