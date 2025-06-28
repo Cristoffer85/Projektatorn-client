@@ -5,11 +5,6 @@ import { CommonModule } from '@angular/common';
   selector: 'app-user',
   standalone: true,
   imports: [CommonModule],
-  template: `
-    <div class="container mt-4">
-      <h2>User Page</h2>
-      <p>Welcome, user! Here you can view your personal dashboard.</p>
-    </div>
-  `
+  templateUrl: './user.component.html'
 })
 export class UserComponent {}
