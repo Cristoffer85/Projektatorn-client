@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FriendshipService } from '../../services/friendship.service';
 import { ChatService } from '../../services/chat.service';
+import { UnreadService } from '../../services/unread.service';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../auth/auth.service';
 import { FormsModule } from '@angular/forms';
@@ -23,7 +24,8 @@ export class ChatComponent implements OnInit {
     private friendshipService: FriendshipService,
     private chatService: ChatService,
     private auth: AuthService,
-    private userService: UserService
+    private userService: UserService,
+    private unreadService: UnreadService
   ) {}
 
   allUsers: any[] = [];
@@ -49,6 +51,7 @@ export class ChatComponent implements OnInit {
       // Fetch unread senders
       this.chatService.getUnreadMessagesSenders(this.username).subscribe(senders => {
         this.unreadSenders = senders;
+        this.unreadService.setUnread(this.unreadSenders.length > 0); // <-- Set unread state
       });
     }
   }
@@ -97,6 +100,7 @@ export class ChatComponent implements OnInit {
         this.messages = msgs;
         // Remove the unread indicator for this friend instantly
         this.unreadSenders = this.unreadSenders.filter(u => u !== this.selectedFriend);
+        this.unreadService.setUnread(this.unreadSenders.length > 0); // <-- Update unread state
       });
     }
   }
