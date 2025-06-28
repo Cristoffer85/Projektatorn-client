@@ -28,7 +28,6 @@ export class SigninComponent {
 
         // Decode role from the new token
         const role = this.auth.getUserRole();
-        console.log('Decoded role:', role);
 
         if (role === 'ADMIN') {
           this.router.navigate(['/admin']);

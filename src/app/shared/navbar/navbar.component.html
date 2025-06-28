@@ -8,6 +8,14 @@
       <a
         class="nav-link p-0 ms-2"
         *ngIf="isLoggedIn"
+        routerLink="/chat"
+        title="Chat"
+      >
+        <img src="assets/chatlogo.png" alt="Chat" style="height:32px;width:32px;object-fit:cover;" />
+      </a>
+      <a
+        class="nav-link p-0 ms-2"
+        *ngIf="isLoggedIn"
         [routerLink]="userRole === 'ADMIN' ? '/admin' : (userRole === 'USER' ? '/user' : '/')"
         title="Account"
       >

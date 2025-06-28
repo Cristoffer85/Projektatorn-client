@@ -1,0 +1,73 @@
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-md-4">
+      <h5>Friends</h5>
+      <ul class="list-group">
+        <li
+          *ngFor="let friend of friends"
+          class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+          [class.active]="selectedFriend === friend.username"
+          (click)="selectFriend(friend)"
+          style="cursor:pointer"
+        >
+          <span>{{ friend.username }}</span>
+          <button
+            class="btn btn-sm btn-outline-danger ms-2"
+            (click)="removeFriend(friend.username, $event)"
+            title="Remove friend"
+          >
+            Remove
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div class="mb-4">
+      <h6>All Users</h6>
+      <ul class="list-group">
+        <li *ngFor="let user of allUsers" class="list-group-item d-flex justify-content-between align-items-center">
+          {{ user.username }}
+          <button
+            class="btn btn-sm btn-outline-primary"
+            (click)="sendFriendRequest(user.username)"
+            [disabled]="isFriend(user.username) || hasOutgoingRequest(user.username)"
+          >
+            {{ isFriend(user.username) ? 'Friend' : hasOutgoingRequest(user.username) ? 'Requested' : 'Add Friend' }}
+          </button>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-8">
+      <h5 *ngIf="selectedFriend">Chat with {{ selectedFriend }}</h5>
+      <div *ngIf="messages.length > 0; else noMessages">
+        <div *ngFor="let msg of messages" class="border rounded p-2 my-1">
+          {{ msg }}
+        </div>
+      </div>
+      <div class="mb-4">
+        <h6>Friend Requests</h6>
+        <ul class="list-group">
+          <li *ngFor="let req of friendRequests" class="list-group-item d-flex justify-content-between align-items-center">
+            {{ req.username }}
+            <div>
+              <button class="btn btn-sm btn-success me-1" (click)="respondToRequest(req.requestId, true)">Accept</button>
+              <button class="btn btn-sm btn-danger" (click)="respondToRequest(req.requestId, false)">Reject</button>
+            </div>
+          </li>
+        </ul>
+      </div>
+      <ng-template #noMessages>
+        <p class="text-muted">No messages yet.</p>
+      </ng-template>
+      <form class="d-flex mt-3" (ngSubmit)="sendMessage()" *ngIf="selectedFriend">
+        <input
+          [(ngModel)]="newMessage"
+          name="message"
+          class="form-control me-2"
+          placeholder="Type a message..."
+          autocomplete="off"
+        />
+        <button class="btn btn-primary" type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+</div>
