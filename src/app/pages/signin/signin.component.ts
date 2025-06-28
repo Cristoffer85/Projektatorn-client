@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { AuthService } from '../../auth/auth.service';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -14,14 +15,29 @@ export class SigninComponent {
   password = '';
   error = '';
 
-  constructor(private auth: AuthService) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+  ) {}
 
   onSubmit() {
     this.auth.login(this.username, this.password).subscribe({
-      next: (res) => {
-        // Handle successful login (e.g., store token, redirect)
+      next: (res: any) => {
+        // Save token to localStorage
+        localStorage.setItem('token', res.token);
+
+        // Decode role from the new token
+        const role = this.auth.getUserRole();
+        console.log('Decoded role:', role);
+
+        if (role === 'ROLE_ADMIN') {
+          this.router.navigate(['/admin']);
+        } else if (role === 'ROLE_USER') {
+          this.router.navigate(['/user']);
+        } else {
+          this.router.navigate(['/']);
+        }
         this.error = '';
-        alert('Login successful!');
       },
       error: (err) => {
         this.error = err.error || 'Login failed';
