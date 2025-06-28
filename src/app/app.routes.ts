@@ -10,6 +10,6 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'signin', component: SigninComponent },
   { path: 'signup', component: SignupComponent },
-  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: { role: 'ROLE_ADMIN' } },
-  { path: 'user', component: UserComponent, canActivate: [AuthGuard], data: { role: 'ROLE_USER' } }
+  { path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: { role: 'ADMIN' } },
+  { path: 'user', component: UserComponent, canActivate: [AuthGuard], data: { role: 'USER' } }
 ];

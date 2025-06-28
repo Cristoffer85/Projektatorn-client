@@ -10,8 +10,8 @@ export class AuthGuard implements CanActivate {
     const token = this.authService.getToken();
     if (token) {
       const decoded = this.authService.decodeToken(token);
-      const allowedRoles = route.data['roles'] as string[];
-      if (allowedRoles && allowedRoles.includes(decoded?.roles)) {
+      const allowedRole = route.data['role'];
+      if (allowedRole && decoded?.roles === allowedRole) {
         return true;
       } else {
         this.router.navigate(['/signin']);

@@ -30,9 +30,9 @@ export class SigninComponent {
         const role = this.auth.getUserRole();
         console.log('Decoded role:', role);
 
-        if (role === 'ROLE_ADMIN') {
+        if (role === 'ADMIN') {
           this.router.navigate(['/admin']);
-        } else if (role === 'ROLE_USER') {
+        } else if (role === 'USER') {
           this.router.navigate(['/user']);
         } else {
           this.router.navigate(['/']);
