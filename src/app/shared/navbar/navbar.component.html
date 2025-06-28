@@ -3,8 +3,12 @@
   <div class="navbar-nav">
     <a class="nav-link" routerLink="/signin" *ngIf="!isLoggedIn">Sign In</a>
     <a class="nav-link" routerLink="/signup" *ngIf="!isLoggedIn">Sign Up</a>
-    <a class="nav-link" routerLink="/user" *ngIf="isLoggedIn && userRole === 'ROLE_USER'">User Page</a>
-    <a class="nav-link" routerLink="/admin" *ngIf="isLoggedIn && userRole === 'ROLE_ADMIN'">Admin Page</a>
-    <a class="nav-link" (click)="logout()" *ngIf="isLoggedIn">Logout</a>
+    <a
+      class="nav-link"
+      *ngIf="isLoggedIn"
+      [routerLink]="userRole === 'ADMIN' ? '/admin' : (userRole === 'USER' ? '/user' : '/')"
+      >Account</a
+    >
+    <a class="nav-link" (click)="logout()" *ngIf="isLoggedIn" style="cursor:pointer;">Logout</a>
   </div>
 </nav>
