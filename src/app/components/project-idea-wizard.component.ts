@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ProjectIdeaService } from '../services/project.idea.service';
 
 @Component({
   selector: 'app-project-idea-wizard',
@@ -15,13 +16,34 @@ export class ProjectIdeaWizardComponent {
   length: string = '';
   ideas: string[] = [];
   loading = false;
+  errorMessage = '';
+
+  constructor(private projectIdeaService: ProjectIdeaService) {}
 
   nextStep() { this.step++; }
   prevStep() { this.step--; }
 
   submit() {
     this.loading = true;
-    // Call your backend API here with the parameters
-    // Example: this.projectIdeaService.getIdeas({type, languages, length}).subscribe(...)
+    this.errorMessage = '';
+    this.ideas = [];
+    this.projectIdeaService.getIdeas({
+      type: this.type,
+      languages: this.languages,
+      length: this.length
+    }).subscribe({
+      next: ideas => {
+        this.ideas = ideas;
+        this.loading = false;
+      },
+      error: err => {
+        this.loading = false;
+        if (err.status === 429) {
+          this.errorMessage = err.error?.message || 'API quota exceeded. Please try again later.';
+        } else {
+          this.errorMessage = 'Failed to generate ideas. Please try again.';
+        }
+      }
+    });
   }
 }
