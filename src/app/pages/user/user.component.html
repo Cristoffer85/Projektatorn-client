@@ -1,6 +1,31 @@
 <div class="card shadow-sm">
   <div class="card-body">
     <h2 class="card-title">User Page</h2>
-    <p class="card-text">Welcome, user! Here you can manage the application.</p>
+    <p class="card-text">
+      Welcome, <b>{{ user.username || username }}</b>! Here you can manage your profile.
+    </p>
+
+    <form *ngIf="editUser" (ngSubmit)="updateUser()" class="mt-4">
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input [(ngModel)]="editUser.email" name="email" class="form-control" type="email" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Birthday</label>
+        <input [(ngModel)]="editUser.birthday" name="birthday" class="form-control" type="date" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Address</label>
+        <input [(ngModel)]="editUser.address" name="address" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Telephone</label>
+        <input [(ngModel)]="editUser.telephone" name="telephone" class="form-control" />
+      </div>
+      <button class="btn btn-primary" type="submit">Update</button>
+    </form>
+
+    <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
   </div>
 </div>
