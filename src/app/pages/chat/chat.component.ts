@@ -1,132 +1,54 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FriendshipService } from '../../services/friendship.service';
+import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../services/chat.service';
 import { UnreadService } from '../../services/unread.service';
-import { UserService } from '../../services/user.service';
 import { AuthService } from '../../auth/auth.service';
-import { FormsModule } from '@angular/forms';
+import { FriendComponent } from '../friend/friend.component';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, FriendComponent],
   templateUrl: './chat.component.html'
 })
-export class ChatComponent implements OnInit {
-  friends: any[] = [];
-  selectedFriend: string | null = null;
+export class ChatComponent {
   messages: string[] = [];
-  username: string | null = null;
   newMessage: string = '';
+  selectedFriend: any = null;
+  username: string | null = null;
+  unreadSenders: string[] = [];
 
   constructor(
-    private friendshipService: FriendshipService,
     private chatService: ChatService,
-    private auth: AuthService,
-    private userService: UserService,
-    private unreadService: UnreadService
+    private unreadService: UnreadService,
+    private auth: AuthService
   ) {}
-
-  allUsers: any[] = [];
-  outgoingRequests: string[] = [];
-  friendRequests: any[] = [];
-  unreadSenders: string[] = [];
 
   ngOnInit() {
     this.username = this.auth.getUsername();
-    if (this.username) {
-      this.friendshipService.getFriends(this.username).subscribe(friends => {
-        this.friends = friends;
-      });
-      this.userService.getAllUsers().subscribe(users => {
-        this.allUsers = users.filter(u => u.username !== this.username);
-      });
-      this.friendshipService.getOutgoingRequests(this.username).subscribe(reqs => {
-        this.outgoingRequests = reqs.map(r => r.username || r);
-      });
-      this.friendshipService.getFriendRequests(this.username).subscribe(reqs => {
-        this.friendRequests = reqs;
-      });
-      // Fetch unread senders
-      this.chatService.getUnreadMessagesSenders(this.username).subscribe(senders => {
-        this.unreadSenders = senders;
-        this.unreadService.setUnread(this.unreadSenders.length > 0); // <-- Set unread state
-      });
-    }
   }
 
-  isFriend(username: string): boolean {
-    return this.friends.some(f => f.username === username);
-  }
-
-  get filteredAllUsers() {
-    return this.allUsers.filter(u => !this.isFriend(u.username));
-  }
-
-  hasUnreadFrom(username: string): boolean {
-    return this.unreadSenders.includes(username);
-  }
-
-  hasOutgoingRequest(username: string): boolean {
-    return this.outgoingRequests.includes(username);
-  }
-
-  sendFriendRequest(toUser: string) {
-    if (!this.username) return;
-    this.friendshipService.sendFriendRequest(this.username, toUser).subscribe(() => {
-      this.outgoingRequests.push(toUser);
-      // Optionally refresh allUsers or outgoingRequests from backend
-    });
-  }
-
-  respondToRequest(requestId: string, accept: boolean) {
-    this.friendshipService.respondToFriendRequest(requestId, accept).subscribe(() => {
-      // Remove the handled request from the list immediately
-      this.friendRequests = this.friendRequests.filter(r => r.requestId !== requestId);
-      // Optionally, refresh friends list if accepted
-      if (accept && this.username) {
-        this.friendshipService.getFriends(this.username).subscribe(friends => {
-          this.friends = friends;
-        });
-      }
-    });
-  }
-
-  selectFriend(friend: any) {
-    this.selectedFriend = friend.username;
+  onFriendSelected(friend: any) {
+    this.selectedFriend = friend;
     if (this.username && this.selectedFriend) {
-      this.chatService.getMessagesBetweenUsers(this.username, this.selectedFriend, this.username).subscribe(msgs => {
+      this.chatService.getMessagesBetweenUsers(this.username, this.selectedFriend.username, this.username).subscribe(msgs => {
         this.messages = msgs;
-        // Remove the unread indicator for this friend instantly
-        this.unreadSenders = this.unreadSenders.filter(u => u !== this.selectedFriend);
-        this.unreadService.setUnread(this.unreadSenders.length > 0); // <-- Update unread state
+        this.unreadSenders = this.unreadSenders.filter(u => u !== this.selectedFriend.username);
+        this.unreadService.setUnread(this.unreadSenders.length > 0);
       });
     }
-  }
-
-  removeFriend(friendUsername: string, event: Event) {
-    event.stopPropagation(); // Prevent selecting the friend when clicking remove
-    if (!this.username) return;
-    this.friendshipService.removeFriend(this.username, friendUsername).subscribe(() => {
-      this.friends = this.friends.filter(f => f.username !== friendUsername);
-      if (this.selectedFriend === friendUsername) {
-        this.selectedFriend = null;
-        this.messages = [];
-      }
-    });
   }
 
   sendMessage() {
     if (!this.newMessage.trim() || !this.username || !this.selectedFriend) return;
     const msgDTO = {
       sender: this.username,
-      receiver: this.selectedFriend,
+      receiver: this.selectedFriend.username,
       message: this.newMessage
     };
     this.chatService.sendMessage(msgDTO).subscribe(() => {
-      // Optionally fetch messages again for up-to-date chat
-      this.chatService.getMessagesBetweenUsers(this.username!, this.selectedFriend!, this.username!).subscribe(msgs => {
+      this.chatService.getMessagesBetweenUsers(this.username!, this.selectedFriend!.username, this.username!).subscribe(msgs => {
         this.messages = msgs;
       });
       this.newMessage = '';
