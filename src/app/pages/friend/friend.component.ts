@@ -4,6 +4,7 @@ import { FriendshipService } from '../../services/friendship.service';
 import { UserService } from '../../services/user.service';
 import { ChatService } from '../../services/chat.service';
 import { AuthService } from '../../auth/auth.service';
+import { UnreadService } from '../../services/unread.service';
 
 @Component({
   selector: 'app-friend',
@@ -26,7 +27,8 @@ export class FriendComponent implements OnInit {
     private friendshipService: FriendshipService,
     private userService: UserService,
     private chatService: ChatService,
-    private auth: AuthService
+    private auth: AuthService,
+    private unreadService: UnreadService
   ) {}
 
   ngOnInit() {
@@ -40,9 +42,10 @@ export class FriendComponent implements OnInit {
         this.outgoingRequests = reqs.map(r => r.username || r);
       });
       this.friendshipService.getFriendRequests(this.username).subscribe(reqs => this.friendRequests = reqs);
-      this.chatService.getUnreadMessagesSenders(this.username).subscribe(senders => {
-        this.unreadSenders = senders;
-      });
+        this.chatService.getUnreadMessagesSenders(this.username!).subscribe(senders => {
+            this.unreadSenders = senders;
+            this.unreadService.setUnread(this.unreadSenders.length > 0); // <-- update unread state
+    });
     }
   }
 
@@ -90,6 +93,8 @@ export class FriendComponent implements OnInit {
   }
 
   selectFriend(friend: any) {
+    this.unreadSenders = this.unreadSenders.filter(u => u !== friend.username);
+    this.unreadService.setUnread(this.unreadSenders.length > 0); // <-- update unread state
     this.friendSelected.emit(friend);
   }
 }
