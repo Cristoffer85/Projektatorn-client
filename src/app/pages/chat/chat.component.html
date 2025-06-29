@@ -9,8 +9,8 @@
     <div class="col-md-8">
       <h5 *ngIf="selectedFriend">Chat with {{ selectedFriend.username || selectedFriend }}</h5>
       <div *ngIf="messages.length > 0; else noMessages">
-        <div *ngFor="let msg of messages" class="border rounded p-2 my-1">
-          {{ msg }}
+        <div class="border rounded p-2 my-1">
+          <div class="mb-0" style="white-space: pre-wrap;">{{ messages.join('\n') }}</div>
         </div>
       </div>
       <ng-template #noMessages>

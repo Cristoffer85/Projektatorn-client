@@ -39,12 +39,12 @@ export class FriendComponent implements OnInit {
         this.isLoadingFriends = true;
         // Use forkJoin to fetch friends and users in parallel == so already added friends are not also shown under "All users"
         forkJoin({
-        friends: this.friendshipService.getFriends(this.username),
-        users: this.userService.getAllUsers()
-        }).subscribe(({ friends, users }) => {
-        this.friends = friends;
-        this.allUsers = users.filter(u => u.username !== this.username);
-        this.isLoadingFriends = false;
+            friends: this.friendshipService.getFriends(this.username),
+            users: this.userService.getAllUsers()
+            }).subscribe(({ friends, users }) => {
+            this.friends = friends;
+            this.allUsers = users.filter(u => u.username !== this.username);
+            this.isLoadingFriends = false;
         });
 
         this.friendshipService.getOutgoingRequests(this.username).subscribe(reqs => {
