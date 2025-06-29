@@ -1,4 +1,7 @@
-<app-navbar></app-navbar>
-<div class="container mt-4">
-  <router-outlet></router-outlet>
+<div class="d-flex flex-column min-vh-100">
+  <app-navbar></app-navbar>
+  <div class="container mt-4 flex-grow-1">
+    <router-outlet></router-outlet>
+  </div>
+  <app-footer></app-footer>
 </div>
