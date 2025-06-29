@@ -24,6 +24,11 @@ export class ProjectIdeaWizardComponent {
   nextStep() { this.step++; }
   prevStep() { this.step--; }
 
+  removeBullet(text: string): string {
+    // Remove all leading *, -, or numbers (with optional whitespace), repeatedly
+    return text.replace(/^([\s\*\-\d\.]+)+/, '').trim();
+  }
+
   toggleSelect(index: number) {
     if (this.selectedIdeas.includes(index)) {
       this.selectedIdeas = this.selectedIdeas.filter(i => i !== index);

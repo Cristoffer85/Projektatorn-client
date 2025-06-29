@@ -37,53 +37,54 @@
   </ng-container>
 
   <!-- Ideas Block: Only show when ideas are present -->
-<ng-template #ideasBlock>
-  <div class="mt-4 w-100" style="max-width: 900px;">
-    <button class="btn btn-secondary mb-3" (click)="resetWizard()">New search?</button>
-    <h5>Project Ideas</h5>
-    <div class="row g-3">
-      <div
-        class="col-12 col-md-6"
-        *ngFor="let idea of ideas; let i = index"
-      >
+  <ng-template #ideasBlock>
+    <div class="mt-4 w-100" style="max-width: 900px;">
+      <button class="btn btn-secondary mb-3" (click)="resetWizard()">New search?</button>
+      <h5>Project Ideas</h5>
+      <div class="row g-3">
         <div
-          class="card h-100"
-          [class.border-primary]="selectedIdeas.includes(i)"
-          style="cursor:pointer;"
-          (click)="toggleSelect(i)"
+          class="col-12 col-md-6"
+          *ngFor="let idea of ideas; let i = index"
         >
           <div
-            class="card-header bg-light fw-bold"
-            *ngIf="idea.includes(':')"
-            style="border-bottom: none;"
+            class="card h-100"
+            [class.border-primary]="selectedIdeas.includes(i)"
+            style="cursor:pointer;"
+            (click)="toggleSelect(i)"
           >
-            {{ idea.split(':')[0] }}
-          </div>
-          <div class="card-body d-flex flex-column justify-content-between">
-            <div class="fw-bold mb-2">
-              <div *ngIf="idea.includes(':')">
-                <div>
-                  {{ idea.split(':').slice(1).join(':').trim() }}
+            <div
+              class="card-header bg-light fw-bold"
+              *ngIf="idea.includes(':')"
+              style="border-bottom: none;"
+            >
+              {{ removeBullet(idea.split(':')[0]).toUpperCase() }}
+            </div>
+            <div class="card-body d-flex flex-column justify-content-between">
+              <div class="fw-bold mb-2">
+                <div *ngIf="idea.includes(':')">
+                  <div>
+                    {{ removeBullet(idea.split(':').slice(1).join(':').trim()) }}
+                  </div>
+                </div>
+                <div *ngIf="!idea.includes(':')">
+                  {{ removeBullet(idea) }}
                 </div>
               </div>
-              <div *ngIf="!idea.includes(':')">
-                {{ idea }}
-              </div>
+              <button
+                class="btn"
+                [ngClass]="selectedIdeas.includes(i) ? 'btn-primary' : 'btn-outline-primary'"
+                [disabled]="!selectedIdeas.includes(i) && selectedIdeas.length >= 2"
+                (click)="toggleSelect(i); $event.stopPropagation();"
+              >
+                {{ selectedIdeas.includes(i) ? 'Selected' : 'Select' }}
+              </button>
             </div>
-            <button
-              class="btn"
-              [ngClass]="selectedIdeas.includes(i) ? 'btn-primary' : 'btn-outline-primary'"
-              [disabled]="!selectedIdeas.includes(i) && selectedIdeas.length >= 2"
-              (click)="toggleSelect(i); $event.stopPropagation();"
-            >
-              {{ selectedIdeas.includes(i) ? 'Selected' : 'Select' }}
-            </button>
           </div>
         </div>
       </div>
+      <div *ngIf="selectedIdeas.length === 2" class="alert alert-info mt-3">
+        You have selected 2 ideas.
+      </div>
     </div>
-    <div *ngIf="selectedIdeas.length === 2" class="alert alert-info mt-3">
-      You have selected 2 ideas.
-    </div>
-  </div>
-</ng-template>
+  </ng-template>
+</div>
