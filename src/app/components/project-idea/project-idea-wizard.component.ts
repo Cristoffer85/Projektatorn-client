@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ProjectIdeaService } from '../services/project.idea.service';
+import { ProjectIdeaService } from '../../services/project.idea.service';
 
 @Component({
   selector: 'app-project-idea-wizard',
@@ -17,11 +17,20 @@ export class ProjectIdeaWizardComponent {
   ideas: string[] = [];
   loading = false;
   errorMessage = '';
+  selectedIdeas: number[] = [];
 
   constructor(private projectIdeaService: ProjectIdeaService) {}
 
   nextStep() { this.step++; }
   prevStep() { this.step--; }
+
+  toggleSelect(index: number) {
+    if (this.selectedIdeas.includes(index)) {
+      this.selectedIdeas = this.selectedIdeas.filter(i => i !== index);
+    } else if (this.selectedIdeas.length < 2) {
+      this.selectedIdeas.push(index);
+    }
+  }
 
   submit() {
     this.loading = true;
@@ -33,7 +42,13 @@ export class ProjectIdeaWizardComponent {
       length: this.length
     }).subscribe({
       next: ideas => {
-        this.ideas = ideas;
+        // Filter out lines that are not list items (start with -, *, or a number + dot)
+        this.ideas = ideas.filter(line =>
+          /^(\s*[-*]\s+|\s*\d+\.\s+)/.test(line)
+        ).map(line =>
+          // Remove the bullet/number for a cleaner look
+          line.replace(/^(\s*[-*]\s+|\s*\d+\.\s+)/, '')
+        );
         this.loading = false;
       },
       error: err => {
@@ -45,5 +60,16 @@ export class ProjectIdeaWizardComponent {
         }
       }
     });
+  }
+
+  resetWizard() {
+    this.step = 1;
+    this.type = '';
+    this.languages = '';
+    this.length = '';
+    this.ideas = [];
+    this.selectedIdeas = [];
+    this.errorMessage = '';
+    this.loading = false;
   }
 }

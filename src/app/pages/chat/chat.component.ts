@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../services/chat.service';
 import { UnreadService } from '../../services/unread.service';
 import { AuthService } from '../../auth/auth.service';
-import { FriendComponent } from '../friend/friend.component';
+import { FriendComponent } from '../../components/friend/friend.component';
 
 @Component({
   selector: 'app-chat',
