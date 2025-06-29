@@ -1,5 +1,8 @@
 <h5>Friends</h5>
 <ul class="list-group mb-4">
+  <li *ngIf="isLoadingFriends" class="list-group-item text-muted">
+    Loading friends...
+  </li>
   <li
     *ngFor="let friend of friends"
     class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"

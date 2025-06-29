@@ -5,6 +5,7 @@ import { UserService } from '../../services/user.service';
 import { ChatService } from '../../services/chat.service';
 import { AuthService } from '../../auth/auth.service';
 import { UnreadService } from '../../services/unread.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-friend',
@@ -22,6 +23,7 @@ export class FriendComponent implements OnInit {
   friendRequests: any[] = [];
   unreadSenders: string[] = [];
   username: string | null = null;
+  isLoadingFriends = true;
 
   constructor(
     private friendshipService: FriendshipService,
@@ -31,23 +33,30 @@ export class FriendComponent implements OnInit {
     private unreadService: UnreadService
   ) {}
 
-  ngOnInit() {
+    ngOnInit() {
     this.username = this.auth.getUsername();
     if (this.username) {
-      this.friendshipService.getFriends(this.username).subscribe(friends => this.friends = friends);
-      this.userService.getAllUsers().subscribe(users => {
+        this.isLoadingFriends = true;
+        // Use forkJoin to fetch friends and users in parallel == so already added friends are not also shown under "All users"
+        forkJoin({
+        friends: this.friendshipService.getFriends(this.username),
+        users: this.userService.getAllUsers()
+        }).subscribe(({ friends, users }) => {
+        this.friends = friends;
         this.allUsers = users.filter(u => u.username !== this.username);
-      });
-      this.friendshipService.getOutgoingRequests(this.username).subscribe(reqs => {
+        this.isLoadingFriends = false;
+        });
+
+        this.friendshipService.getOutgoingRequests(this.username).subscribe(reqs => {
         this.outgoingRequests = reqs.map(r => r.username || r);
-      });
-      this.friendshipService.getFriendRequests(this.username).subscribe(reqs => this.friendRequests = reqs);
-        this.chatService.getUnreadMessagesSenders(this.username!).subscribe(senders => {
-            this.unreadSenders = senders;
-            this.unreadService.setUnread(this.unreadSenders.length > 0); // <-- update unread state
-    });
+        });
+        this.friendshipService.getFriendRequests(this.username).subscribe(reqs => this.friendRequests = reqs);
+        this.chatService.getUnreadMessagesSenders(this.username).subscribe(senders => {
+        this.unreadSenders = senders;
+        this.unreadService.setUnread(this.unreadSenders.length > 0);
+        });
     }
-  }
+    }
 
   isFriend(username: string): boolean {
     return this.friends.some(f => f.username === username);
