@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProjectIdeaService } from '../../services/project.idea.service';
@@ -9,7 +9,7 @@ import { ProjectIdeaService } from '../../services/project.idea.service';
   imports: [CommonModule, FormsModule],
   templateUrl: './project-idea-wizard.component.html'
 })
-export class ProjectIdeaWizardComponent {
+export class ProjectIdeaWizardComponent implements OnInit {
   step = 1;
   type: string = '';
   languages: string = '';
@@ -20,6 +20,22 @@ export class ProjectIdeaWizardComponent {
   selectedIdeas: number[] = [];
 
   constructor(private projectIdeaService: ProjectIdeaService) {}
+
+  ngOnInit() {
+    const saved = localStorage.getItem('projectIdeaWizardState');
+    if (saved) {
+      const state = JSON.parse(saved);
+      this.ideas = state.ideas || [];
+      this.selectedIdeas = state.selectedIdeas || [];
+      this.type = state.type || '';
+      this.languages = state.languages || '';
+      this.length = state.length || '';
+      // If there are ideas, skip to the ideas block
+      if (this.ideas.length > 0) {
+        this.step = 3;
+      }
+    }
+  }
 
   nextStep() { this.step++; }
   prevStep() { this.step--; }
@@ -35,6 +51,7 @@ export class ProjectIdeaWizardComponent {
     } else if (this.selectedIdeas.length < 2) {
       this.selectedIdeas.push(index);
     }
+    this.saveWizardState();
   }
 
   submit() {
@@ -55,6 +72,7 @@ export class ProjectIdeaWizardComponent {
           line.replace(/^(\s*[-*]\s+|\s*\d+\.\s+)/, '')
         );
         this.loading = false;
+        this.saveWizardState();
       },
       error: err => {
         this.loading = false;
@@ -67,14 +85,24 @@ export class ProjectIdeaWizardComponent {
     });
   }
 
+  saveWizardState() {
+    const state = {
+      ideas: this.ideas,
+      selectedIdeas: this.selectedIdeas,
+      type: this.type,
+      languages: this.languages,
+      length: this.length
+    };
+    localStorage.setItem('projectIdeaWizardState', JSON.stringify(state));
+  }
+
   resetWizard() {
-    this.step = 1;
+    this.ideas = [];
+    this.selectedIdeas = [];
     this.type = '';
     this.languages = '';
     this.length = '';
-    this.ideas = [];
-    this.selectedIdeas = [];
-    this.errorMessage = '';
-    this.loading = false;
+    localStorage.removeItem('projectIdeaWizardState');
+    this.step = 1;
   }
 }
