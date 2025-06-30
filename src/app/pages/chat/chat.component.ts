@@ -29,14 +29,22 @@ export class ChatComponent {
     this.username = this.auth.getUsername();
   }
 
+  fetchHistory() {
+    if (this.username && this.selectedFriend) {
+      this.chatService.getChatHistory(this.username, this.selectedFriend.username).subscribe(history => {
+        this.messages = history.map(msg => `${msg.sender}: ${msg.content}`);
+      });
+    }
+  }
+
   onFriendSelected(friend: any) {
     this.selectedFriend = friend;
     if (this.username && this.selectedFriend) {
-      this.chatService.getMessagesBetweenUsers(this.username, this.selectedFriend.username, this.username).subscribe(msgs => {
-        this.messages = msgs;
-        this.unreadSenders = this.unreadSenders.filter(u => u !== this.selectedFriend.username);
-        this.unreadService.setUnread(this.unreadSenders.length > 0);
+      this.chatService.getChatHistory(this.username, this.selectedFriend.username).subscribe(history => {
+        this.messages = history.map(msg => `${msg.sender}: ${msg.content}`);
       });
+      this.unreadSenders = this.unreadSenders.filter(u => u !== this.selectedFriend.username);
+      this.unreadService.setUnread(this.unreadSenders.length > 0);
     }
   }
 
@@ -48,8 +56,9 @@ export class ChatComponent {
       message: this.newMessage
     };
     this.chatService.sendMessage(msgDTO).subscribe(() => {
-      this.chatService.getMessagesBetweenUsers(this.username!, this.selectedFriend!.username, this.username!).subscribe(msgs => {
-        this.messages = msgs;
+      // After sending, fetch from the database for consistency
+      this.chatService.getChatHistory(this.username!, this.selectedFriend!.username).subscribe(history => {
+        this.messages = history.map(msg => `${msg.sender}: ${msg.message}`);
       });
       this.newMessage = '';
     });
