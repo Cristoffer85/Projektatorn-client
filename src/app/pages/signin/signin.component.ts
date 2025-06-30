@@ -9,6 +9,8 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { NgZone } from '@angular/core';
+import { ChatService } from '../../services/chat.service';
+import { UnreadService } from '../../services/unread.service';
 
 @Component({
   selector: 'app-signin',
@@ -27,7 +29,9 @@ export class SigninComponent {
     private e2eeKeyService: E2eeKeyService,
     private e2eeCryptoService: E2eeCryptoService,
     private http: HttpClient,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private chatService: ChatService,
+    private unreadService: UnreadService
   ) {}
 
   async onSubmit() {
@@ -80,7 +84,6 @@ export class SigninComponent {
 
         // 5. Navigate as before (ensure this is inside ngZone)
         const role = this.auth.getUserRole();
-        this.error = '';
         this.ngZone.run(() => {
           if (role === 'ADMIN') {
             this.router.navigate(['/admin']);
@@ -88,6 +91,13 @@ export class SigninComponent {
             this.router.navigate(['/user']);
           }
         });
+        // Immediately update unread badge after navigation
+        const username = this.auth.getUsername();
+        if (username) {
+          this.chatService.getUnreadMessagesSenders(username).subscribe(senders => {
+            this.unreadService.setUnread(senders.length > 0);
+          });
+        }
       },
       error: (err) => {
         this.error = err.error || 'Login failed';

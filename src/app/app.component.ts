@@ -25,12 +25,12 @@ export class AppComponent implements OnInit, OnDestroy {
   private unreadSub?: Subscription;
 
   ngOnInit() {
-    const username = this.auth.getUsername?.();
+    // Always get username from AuthService (should be available after login)
+    const username = this.auth.getUsername();
     if (username) {
-      // Initial fetch
       this.fetchUnread(username);
 
-      // Poll every 30 seconds (adjust as needed)
+      // Poll every 30 seconds
       this.unreadSub = interval(30000).subscribe(() => {
         this.fetchUnread(username);
       });

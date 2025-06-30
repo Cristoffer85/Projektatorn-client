@@ -63,6 +63,15 @@ export class ChatComponent {
     this.fetchHistory();
     this.unreadSenders = this.unreadSenders.filter(u => u !== this.selectedFriend.username);
     this.unreadService.setUnread(this.unreadSenders.length > 0);
+
+    // Mark messages as read in backend
+    this.chatService.markMessagesAsRead(this.username!, this.selectedFriend.username).subscribe(() => {
+      // Optionally, re-fetch unread senders here if you want to update the list
+      this.chatService.getUnreadMessagesSenders(this.username!).subscribe(senders => {
+        this.unreadSenders = senders;
+        this.unreadService.setUnread(this.unreadSenders.length > 0);
+      });
+    });
   }
 
   async sendMessage() {
@@ -90,7 +99,6 @@ export class ChatComponent {
       contentForReceiver: encryptedForReceiver,
       contentForSender: encryptedForSender
     };
-    console.log('msgDTO:', msgDTO);
 
     this.chatService.sendMessage(msgDTO).subscribe(() => {
       this.newMessage = '';
