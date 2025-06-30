@@ -58,5 +58,6 @@
     *ngIf="!profileLoading && selectedProfile"
     [friend]="selectedProfile"
     (close)="selectedProfile = null">
+    (remove)="removeFriend($event)">
   </app-friend-profile>
 </ng-template>

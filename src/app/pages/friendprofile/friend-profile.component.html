@@ -8,5 +8,12 @@
     <p *ngIf="friend?.telephone"><strong>Telephone:</strong> {{ friend.telephone }}</p>
     <p *ngIf="friend?.birthday"><strong>Birthday:</strong> {{ friend.birthday | date:'yyyy-MM-dd' }}</p>
     <p *ngIf="friend?.address"><strong>Address:</strong> {{ friend.address }}</p>
+    <button
+      class="btn btn-danger mt-3 w-100"
+      (click)="remove.emit(friend)"
+      *ngIf="friend"
+    >
+      Remove Friend
+    </button>
   </div>
 </div>

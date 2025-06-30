@@ -10,4 +10,5 @@ import { CommonModule } from '@angular/common';
 export class FriendProfileComponent {
   @Input() friend: any;
   @Output() close = new EventEmitter<void>();
+  @Output() remove = new EventEmitter<any>();
 }
