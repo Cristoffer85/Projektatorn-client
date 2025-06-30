@@ -16,13 +16,16 @@ export class SignupComponent {
   error = '';
   loading = false;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router
+  ) {}
 
-  onSubmit() {
+  async onSubmit() {
     this.loading = true;
     this.error = '';
     this.auth.register(this.username, this.password).subscribe({
-      next: () => {
+      next: async () => {
         this.loading = false;
         alert('Registration successful! Please sign in.');
         this.router.navigate(['/signin']);
