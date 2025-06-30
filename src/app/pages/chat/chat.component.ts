@@ -43,6 +43,7 @@ export class ChatComponent {
             const decrypted = await this.e2eeCryptoService.decryptMessage(msg.content, privateKey);
             return `${msg.sender}: ${decrypted}`;
           } catch (e) {
+            console.error('Decryption error:', e);
             return `${msg.sender}: [Unable to decrypt]`;
           }
         }));
