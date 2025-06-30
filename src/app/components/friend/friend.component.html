@@ -1,3 +1,9 @@
+<app-friend-profile
+  *ngIf="selectedProfile"
+  [friend]="selectedProfile"
+  (close)="selectedProfile = null">
+</app-friend-profile>
+
 <h5>Friends</h5>
 <ul class="list-group mb-4">
   <li *ngIf="isLoadingFriends" class="list-group-item text-muted">
@@ -14,11 +20,11 @@
   >
     <span>{{ friend.username }}</span>
     <button
-      class="btn btn-sm btn-outline-danger ms-2"
-      (click)="removeFriend(friend.username, $event)"
-      title="Remove friend"
+      class="btn btn-sm btn-outline-secondary ms-2"
+      (click)="viewProfileClicked(friend); $event.stopPropagation()"
+      title="View profile"
     >
-      Remove
+      View Profile
     </button>
   </li>
 </ul>

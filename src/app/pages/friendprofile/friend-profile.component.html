@@ -1,0 +1,11 @@
+<div class="card shadow-sm">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">{{ friend?.username }}</h5>
+    <button type="button" class="btn-close" aria-label="Close" (click)="close.emit()"></button>
+  </div>
+  <div class="card-body">
+    <p *ngIf="friend?.email"><strong>Email:</strong> {{ friend.email }}</p>
+    <p *ngIf="friend?.bio"><strong>Bio:</strong> {{ friend.bio }}</p>
+    <!-- Add more fields as needed -->
+  </div>
+</div>

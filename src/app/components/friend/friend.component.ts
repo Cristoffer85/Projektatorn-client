@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FriendProfileComponent } from '../../pages/friendprofile/friend-profile.component';
 import { FriendshipService } from '../../services/friendship.service';
 import { UserService } from '../../services/user.service';
 import { ChatService } from '../../services/chat.service';
@@ -10,11 +11,12 @@ import { forkJoin } from 'rxjs';
 @Component({
   selector: 'app-friend',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FriendProfileComponent],
   templateUrl: './friend.component.html'
 })
 export class FriendComponent implements OnInit {
   @Output() friendSelected = new EventEmitter<any>();
+  @Output() viewProfile = new EventEmitter<any>();
   @Input() selectedFriend: string | null = null;
 
   friends: any[] = [];
@@ -24,6 +26,7 @@ export class FriendComponent implements OnInit {
   unreadSenders: string[] = [];
   username: string | null = null;
   isLoadingFriends = true;
+  selectedProfile: any = null;
 
   constructor(
     private friendshipService: FriendshipService,
@@ -33,7 +36,11 @@ export class FriendComponent implements OnInit {
     private unreadService: UnreadService
   ) {}
 
-    ngOnInit() {
+  viewProfileClicked(friend: any) {
+    this.viewProfile.emit(friend);
+  }
+
+  ngOnInit() {
     this.username = this.auth.getUsername();
     if (this.username) {
         this.isLoadingFriends = true;
@@ -56,14 +63,24 @@ export class FriendComponent implements OnInit {
         this.unreadService.setUnread(this.unreadSenders.length > 0);
         });
     }
-    }
+  }
 
   isFriend(username: string): boolean {
     return this.friends.some(f => f.username === username);
   }
 
   get filteredAllUsers() {
-    return this.allUsers.filter(u => !this.isFriend(u.username));
+    const pending = this.pendingRequestUsernames;
+    return this.allUsers.filter(u =>
+      !this.isFriend(u.username) &&
+      !pending.includes(u.username)
+    );
+  }
+
+  showProfile(friend: any) {
+    this.userService.getOneUser(friend.username).subscribe(profile => {
+      this.selectedProfile = profile;
+    });
   }
 
   hasUnreadFrom(username: string): boolean {
@@ -88,6 +105,14 @@ export class FriendComponent implements OnInit {
         this.friendshipService.getFriends(this.username).subscribe(friends => this.friends = friends);
       }
     });
+  }
+
+  get pendingRequestUsernames(): string[] {
+    // Incoming requests: users who sent you a request
+    const incoming = this.friendRequests.map(r => r.username);
+    // Outgoing requests: users you sent a request to
+    const outgoing = this.outgoingRequests;
+    return [...incoming, ...outgoing];
   }
 
   removeFriend(friendUsername: string, event: Event) {

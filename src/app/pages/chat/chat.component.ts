@@ -8,11 +8,12 @@ import { FriendComponent } from '../../components/friend/friend.component';
 import { E2eeKeyService } from '../../services/security/e2eekey.service';
 import { E2eeCryptoService } from '../../services/security/e2eecrypto.service';
 import { firstValueFrom } from 'rxjs';
+import { FriendProfileComponent } from '../friendprofile/friend-profile.component';
 
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule, FriendComponent],
+  imports: [CommonModule, FormsModule, FriendComponent, FriendProfileComponent],
   templateUrl: './chat.component.html'
 })
 export class ChatComponent {
@@ -21,6 +22,7 @@ export class ChatComponent {
   selectedFriend: any = null;
   username: string | null = null;
   unreadSenders: string[] = [];
+  selectedProfile: any = null;
 
   constructor(
     private chatService: ChatService,
@@ -72,6 +74,10 @@ export class ChatComponent {
         this.unreadService.setUnread(this.unreadSenders.length > 0);
       });
     });
+  }
+
+  onViewProfile(friend: any) {
+    this.selectedProfile = friend;
   }
 
   async sendMessage() {

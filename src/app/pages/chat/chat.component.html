@@ -1,10 +1,19 @@
 <div class="container mt-4">
   <div class="row">
     <div class="col-md-4">
-      <app-friend
-        [selectedFriend]="selectedFriend"
-        (friendSelected)="onFriendSelected($event)">
-      </app-friend>
+      <ng-container *ngIf="!selectedProfile; else profileView">
+        <app-friend
+          [selectedFriend]="selectedFriend"
+          (friendSelected)="onFriendSelected($event)"
+          (viewProfile)="onViewProfile($event)">
+        </app-friend>
+      </ng-container>
+      <ng-template #profileView>
+        <app-friend-profile
+          [friend]="selectedProfile"
+          (close)="selectedProfile = null">
+        </app-friend-profile>
+      </ng-template>
     </div>
     <div class="col-md-8">
       <h5 *ngIf="selectedFriend">Chat with {{ selectedFriend.username || selectedFriend }}</h5>
@@ -14,7 +23,7 @@
         </div>
       </div>
       <ng-template #noMessages>
-        <p class="text-muted">No messages yet.</p>
+        <p class="text-muted">Select friend in list to view messages.</p>
       </ng-template>
       <form class="d-flex mt-3" (ngSubmit)="sendMessage()" *ngIf="selectedFriend">
         <input
