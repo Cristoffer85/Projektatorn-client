@@ -10,10 +10,33 @@
     <p *ngIf="friend?.address"><strong>Address:</strong> {{ friend.address }}</p>
     <button
       class="btn btn-danger mt-3 w-100"
-      (click)="remove.emit(friend)"
+      (click)="confirmRemove()"
       *ngIf="friend"
     >
       Remove Friend
     </button>
+  </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div
+  class="modal fade show"
+  tabindex="-1"
+  style="display:block; background:rgba(0,0,0,0.3);"
+  *ngIf="showConfirm"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Confirm Removal</h5>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to remove this friend?</p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-danger" (click)="cancelRemove()">No</button>
+        <button class="btn btn-secondary" (click)="doRemove()">Yes, Remove</button>
+      </div>
+    </div>
   </div>
 </div>
