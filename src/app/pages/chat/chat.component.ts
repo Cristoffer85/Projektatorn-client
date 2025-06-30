@@ -40,7 +40,14 @@ export class ChatComponent {
         const privateKey = await this.e2eeKeyService.getPrivateKey(this.username!);
         this.messages = await Promise.all(history.map(async msg => {
           try {
-            const decrypted = await this.e2eeCryptoService.decryptMessage(msg.content, privateKey);
+            let decrypted: string;
+            if (msg.receiver === this.username) {
+              decrypted = await this.e2eeCryptoService.decryptMessage(msg.contentForReceiver, privateKey);
+            } else if (msg.sender === this.username) {
+              decrypted = await this.e2eeCryptoService.decryptMessage(msg.contentForSender, privateKey);
+            } else {
+              return `${msg.sender}: [Unable to decrypt]`;
+            }
             return `${msg.sender}: ${decrypted}`;
           } catch (e) {
             console.error('Decryption error:', e);
@@ -60,27 +67,31 @@ export class ChatComponent {
 
   async sendMessage() {
     if (!this.newMessage.trim() || !this.username || !this.selectedFriend) return;
+
     // 1. Fetch recipient's public key
     const recipientJwk = await firstValueFrom(this.e2eeKeyService.getPublicKey(this.selectedFriend.username));
     if (!recipientJwk) {
-      // Handle error: recipient has no public key
       alert('Recipient has no public key set up.');
       return;
     }
     const recipientKey = await this.e2eeCryptoService.importPublicKey(recipientJwk);
-    // 2. Encrypt message
-    const encrypted = await this.e2eeCryptoService.encryptMessage(this.newMessage, recipientKey);
-    console.log('Encrypted message:', encrypted);
-    if (!encrypted) {
-      alert('Encryption failed!');
-      return;
-    }
+
+    // 2. Fetch sender's own public key
+    const senderJwk = await firstValueFrom(this.e2eeKeyService.getPublicKey(this.username));
+    const senderKey = await this.e2eeCryptoService.importPublicKey(senderJwk);
+
+    // 3. Encrypt message for both
+    const encryptedForReceiver = await this.e2eeCryptoService.encryptMessage(this.newMessage, recipientKey);
+    const encryptedForSender = await this.e2eeCryptoService.encryptMessage(this.newMessage, senderKey);
+
     const msgDTO = {
       sender: this.username,
       receiver: this.selectedFriend.username,
-      content: encrypted
+      contentForReceiver: encryptedForReceiver,
+      contentForSender: encryptedForSender
     };
-    console.log('msgDTO:', msgDTO); // <-- Add here
+    console.log('msgDTO:', msgDTO);
+
     this.chatService.sendMessage(msgDTO).subscribe(() => {
       this.newMessage = '';
       this.fetchHistory();
