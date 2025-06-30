@@ -27,6 +27,7 @@ export class FriendComponent implements OnInit {
   username: string | null = null;
   isLoadingFriends = true;
   selectedProfile: any = null;
+  profileLoading = false;
 
   constructor(
     private friendshipService: FriendshipService,
@@ -35,10 +36,6 @@ export class FriendComponent implements OnInit {
     private auth: AuthService,
     private unreadService: UnreadService
   ) {}
-
-  viewProfileClicked(friend: any) {
-    this.viewProfile.emit(friend);
-  }
 
   ngOnInit() {
     this.username = this.auth.getUsername();
@@ -77,11 +74,14 @@ export class FriendComponent implements OnInit {
     );
   }
 
-  showProfile(friend: any) {
-    this.userService.getOneUser(friend.username).subscribe(profile => {
-      this.selectedProfile = profile;
-    });
-  }
+showProfile(friend: any) {
+  this.profileLoading = true;
+  this.userService.getOneUser(friend.username).subscribe(profile => {
+    this.selectedProfile = profile;
+    this.profileLoading = false;
+    this.friendSelected.emit(friend);
+  });
+}
 
   hasUnreadFrom(username: string): boolean {
     return this.unreadSenders.includes(username);

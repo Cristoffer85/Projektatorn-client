@@ -5,7 +5,8 @@
   </div>
   <div class="card-body">
     <p *ngIf="friend?.email"><strong>Email:</strong> {{ friend.email }}</p>
-    <p *ngIf="friend?.bio"><strong>Bio:</strong> {{ friend.bio }}</p>
-    <!-- Add more fields as needed -->
+    <p *ngIf="friend?.telephone"><strong>Telephone:</strong> {{ friend.telephone }}</p>
+    <p *ngIf="friend?.birthday"><strong>Birthday:</strong> {{ friend.birthday | date:'yyyy-MM-dd' }}</p>
+    <p *ngIf="friend?.address"><strong>Address:</strong> {{ friend.address }}</p>
   </div>
 </div>
