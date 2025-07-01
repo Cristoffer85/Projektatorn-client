@@ -5,6 +5,27 @@
       Welcome, <b>{{ user.username || username }}</b>! Here you can manage your profile.
     </p>
 
+    <div class="mb-3">
+      <label class="form-label">Pick Your Teampersonality Avatar</label>
+      <div class="d-flex flex-wrap gap-2">
+        <div *ngFor="let avatar of avatars" class="text-center">
+          <img
+            [src]="avatarBaseUrl + avatar"
+            [alt]="avatarDisplayNames[avatar] || avatar"
+            width="64"
+            height="64"
+            class="rounded border"
+            [class.border-primary]="editUser.avatar === avatar"
+            style="cursor:pointer"
+            (click)="editUser.avatar = avatar"
+          />
+        </div>
+      </div>
+      <div class="mt-2" *ngIf="editUser.avatar">
+        <small>{{ avatarDisplayNames[editUser.avatar] || editUser.avatar }}</small>
+      </div>
+    </div>
+
     <form *ngIf="editUser" (ngSubmit)="updateUser()" class="mt-4">
       <div class="mb-3">
         <label class="form-label">Email</label>
@@ -29,10 +50,7 @@
         <label class="form-label">Favourite Sour Snack?</label>
         <input [(ngModel)]="editUser.soursnack" name="soursnack" class="form-control" />
       </div>
-      <div class="mb-3">
-        <label class="form-label">Avatar</label>
-        <input [(ngModel)]="editUser.avatar" name="avatar" class="form-control" />
-      </div>
+
       <button class="btn btn-primary" type="submit">Update</button>
     </form>
 

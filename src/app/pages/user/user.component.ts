@@ -17,6 +17,28 @@ export class UserComponent implements OnInit {
   successMessage = '';
   errorMessage = '';
 
+  avatarBaseUrl = 'https://projektatorn-server.onrender.com/avatars/';
+  avatars = [
+    'TheDiplomat.png',
+    'TheDriver.png',
+    'TheExpert.png',
+    'TheInnovator.png',
+    'TheNaysayer.png',
+    'TheOrganizer.png',
+    'TheVisionary.png',
+    'TheWildcard.png'
+  ];
+  avatarDisplayNames: { [key: string]: string } = {
+    'TheDiplomat.png': 'The Diplomat',
+    'TheDriver.png': 'The Driver',
+    'TheExpert.png': 'The Expert',
+    'TheInnovator.png': 'The Innovator',
+    'TheNaysayer.png': 'The Nay Sayer',
+    'TheOrganizer.png': 'The Organizer',
+    'TheVisionary.png': 'The Visionary',
+    'TheWildcard.png': 'The Wildcard'
+  };
+
   constructor(
     private userService: UserService,
     private auth: AuthService
@@ -28,8 +50,8 @@ export class UserComponent implements OnInit {
       this.userService.getOneUser(this.username).subscribe({
         next: user => {
           this.user = user;
-          // Format birthday for input[type="date"]
           this.editUser = { ...user };
+          // Format birthday for input[type="date"]
           if (this.editUser.birthday) {
             this.editUser.birthday = this.editUser.birthday.substring(0, 10);
           }
