@@ -2,12 +2,12 @@
   <div class="container">
     <a class="navbar-brand" routerLink="/">Projektatorn</a>
     <div class="navbar-nav ms-auto align-items-center">
-      <a class="nav-link" routerLink="/signin" *ngIf="!isLoggedIn">Sign In</a>
-      <a class="nav-link" routerLink="/signup" *ngIf="!isLoggedIn">Sign Up</a>
-      <a class="nav-link" (click)="logout()" *ngIf="isLoggedIn" style="cursor:pointer;">Logout</a>
+      <a class="nav-link" routerLink="/signin" *ngIf="!auth.isLoggedIn()">Sign In</a>
+      <a class="nav-link" routerLink="/signup" *ngIf="!auth.isLoggedIn()">Sign Up</a>
+      <a class="nav-link" (click)="logout()" *ngIf="auth.isLoggedIn()" style="cursor:pointer;">Logout</a>
       <a
         class="nav-link p-0 ms-2"
-        *ngIf="isLoggedIn"
+        *ngIf="auth.isLoggedIn()"
         routerLink="/chat"
         title="Chat"
       >
@@ -19,11 +19,15 @@
       </a>
       <a
         class="nav-link p-0 ms-2"
-        *ngIf="isLoggedIn"
-        [routerLink]="userRole === 'ADMIN' ? '/admin' : (userRole === 'USER' ? '/user' : '/')"
+        *ngIf="auth.isLoggedIn()"
+        [routerLink]="['/user']"
         title="Account"
       >
-        <img src="assets/accountlogo.png" alt="Account" style="height:32px;width:32px;object-fit:cover;border-radius:50%;" />
+        <img
+          [src]="userAvatar"
+          alt="Account"
+          style="height:32px;width:32px;object-fit:cover;border-radius:50%;"
+        />
       </a>
     </div>
   </div>

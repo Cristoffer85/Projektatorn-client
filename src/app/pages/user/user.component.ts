@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment';
 import { UserService } from '../../services/user.service';
 import { AuthService } from '../../auth/auth.service';
 import { FormsModule } from '@angular/forms';
@@ -17,8 +18,9 @@ export class UserComponent implements OnInit {
   successMessage = '';
   errorMessage = '';
 
-  avatarBaseUrl = 'https://projektatorn-server.onrender.com/avatars/';
+  avatarBaseUrl = environment.apiUrl + '/avatars/';
   avatars = [
+    'accountlogo.png',
     'TheDiplomat.png',
     'TheDriver.png',
     'TheExpert.png',
@@ -29,6 +31,7 @@ export class UserComponent implements OnInit {
     'TheWildcard.png'
   ];
   avatarDisplayNames: { [key: string]: string } = {
+    'accountlogo.png': 'Default Account Logo',
     'TheDiplomat.png': 'The Diplomat',
     'TheDriver.png': 'The Driver',
     'TheExpert.png': 'The Expert',
@@ -70,6 +73,7 @@ export class UserComponent implements OnInit {
         this.user = updated;
         this.successMessage = 'Profile updated!';
         this.errorMessage = '';
+        this.userService.setUserProfile(updated); // Notify others (like navbar)
       },
       error: () => {
         this.errorMessage = 'Update failed.';

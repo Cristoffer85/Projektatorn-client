@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
   private apiUrl = `${environment.apiUrl}/user`;
+  private userProfileSubject = new BehaviorSubject<any>(null);
 
   constructor(private http: HttpClient) {}
 
@@ -27,5 +28,12 @@ export class UserService {
 
   resetPassword(token: string, newPassword: string) {
     return this.http.post(`${this.apiUrl}/reset-password`, { token, newPassword });
+  }
+
+  setUserProfile(profile: any) {
+    this.userProfileSubject.next(profile);
+  }
+  getUserProfileObservable() {
+    return this.userProfileSubject.asObservable();
   }
 }
