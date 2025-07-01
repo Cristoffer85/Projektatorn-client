@@ -3,20 +3,29 @@
     <h5 class="mb-0">{{ friend?.username }}</h5>
     <button type="button" class="btn-close" aria-label="Close" (click)="close.emit()"></button>
   </div>
-    <div class="card-body">
-      <p *ngIf="friend?.email"><strong>Email:</strong> {{ friend.email }}</p>
-      <p *ngIf="friend?.forestanimal"><strong>Favourite Forest Animal -</strong> {{ friend.forestanimal }}</p>
-      <p *ngIf="friend?.soursnack"><strong>Favourite Sour Snack -</strong> {{ friend.soursnack }}</p>
-      <p *ngIf="friend?.avatar"><strong>Avatar:</strong> {{ friend.avatar }}</p>
-      <p *ngIf="friend?.birthday"><strong>Birthdate:</strong> {{ friend.birthday }}</p>
-      <button
-        class="btn btn-danger mt-3 w-100"
-        (click)="confirmRemove()"
-        *ngIf="friend"
-      >
-        Remove Friend
-      </button>
-    </div>
+  <div class="card-body">
+        <p *ngIf="friend?.avatar">
+      <strong>Avatar:</strong>
+      <img
+        [src]="avatarBaseUrl + friend.avatar"
+        [alt]="friend.avatar"
+        width="48"
+        height="48"
+        class="rounded border ms-2 align-middle"
+      />
+    </p>
+    <p *ngIf="friend?.email"><strong>Email:</strong> {{ friend.email }}</p>
+    <p *ngIf="friend?.forestanimal"><strong>Favourite Forest Animal -</strong> {{ friend.forestanimal }}</p>
+    <p *ngIf="friend?.soursnack"><strong>Favourite Sour Snack -</strong> {{ friend.soursnack }}</p>
+    <p *ngIf="friend?.birthday"><strong>Birthdate:</strong> {{ friend.birthday }}</p>
+    <button
+      class="btn btn-danger mt-3 w-100"
+      (click)="confirmRemove()"
+      *ngIf="friend"
+    >
+      Remove Friend
+    </button>
+  </div>
 </div>
 
 <!-- Confirmation Modal -->

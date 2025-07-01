@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-friend-profile',
@@ -13,6 +14,7 @@ export class FriendProfileComponent {
   @Output() remove = new EventEmitter<any>();
 
   showConfirm = false;
+  avatarBaseUrl = environment.apiUrl + '/avatars/';
 
   confirmRemove() {
     this.showConfirm = true;

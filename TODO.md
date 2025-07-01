@@ -1,4 +1,4 @@
-1. Add fixed number of pixel drawn teamwork- profile images (of typical characters in team, with description also added under/to the side) which user can choose and have as avatar.
+1. Add fixed number of pixel drawn teamwork- profile images (of typical characters in team, with description also added under/to the side) which user can choose and have as avatar.   // Done
 
 
 2. In user object, - remove: 
