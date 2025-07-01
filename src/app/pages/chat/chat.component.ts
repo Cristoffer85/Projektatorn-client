@@ -58,6 +58,12 @@ export class ChatComponent {
         }));
       });
     }
+    /*          // Sort of works for clearing all old messages instantly when friend is removed (no manual page refresh needed) 
+                // But, the unread notification bugs out and spontanenously show new messages sometimes even though no new messages have been received.
+    else {      
+      this.messages = [];
+    }
+    */
   }
 
   onFriendSelected(friend: any) {
@@ -78,6 +84,17 @@ export class ChatComponent {
 
   onViewProfile(friend: any) {
     this.selectedProfile = friend;
+  }
+
+  onFriendRemoved(username: string) {
+    if (this.selectedFriend && (
+          this.selectedFriend.username === username ||
+          this.selectedFriend === username
+        )) {
+      this.selectedFriend = null;
+      this.selectedProfile = null;
+      this.messages = [];
+    }
   }
 
   async sendMessage() {

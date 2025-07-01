@@ -31,6 +31,12 @@ export class FriendshipService {
     return this.http.put<any>(`${this.apiUrl}/respond-request/${requestId}`, null, { params });
   }
 
+  withdrawFriendRequest(fromUsername: string, toUsername: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/withdraw-friend-request`, {
+      params: { fromUsername, toUsername }
+    });
+  }
+
   removeFriend(username: string, friendUsername: string): Observable<void> {
     let params = new HttpParams().set('username', username).set('friendUsername', friendUsername);
     return this.http.delete<void>(`${this.apiUrl}/remove-friend`, { params });

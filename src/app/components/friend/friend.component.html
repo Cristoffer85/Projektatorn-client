@@ -28,13 +28,39 @@
   <ul class="list-group mb-4">
     <li *ngFor="let user of filteredAllUsers" class="list-group-item d-flex justify-content-between align-items-center">
       {{ user.username }}
-      <button
-        class="btn btn-sm btn-outline-primary"
-        (click)="sendFriendRequest(user.username)"
-        [disabled]="isFriend(user.username) || hasOutgoingRequest(user.username)"
-      >
-        {{ isFriend(user.username) ? 'Friend' : hasOutgoingRequest(user.username) ? 'Requested' : 'Add Friend' }}
-      </button>
+      <div>
+        <button
+          *ngIf="isFriend(user.username)"
+          class="btn btn-sm btn-success"
+          disabled
+        >
+          Friend
+        </button>
+        <ng-container *ngIf="!isFriend(user.username)">
+        <button
+          *ngIf="hasOutgoingRequest(user.username)"
+          class="btn btn-sm btn-secondary bg-light me-1"
+          style="color: #6c757d; border: 1px solid #ced4da;"
+          disabled
+        >
+          Request Sent
+        </button>
+          <button
+            *ngIf="hasOutgoingRequest(user.username)"
+            class="btn btn-sm btn-danger text-white"
+            (click)="withdrawFriendRequest(user.username)"
+          >
+            Withdraw Request
+          </button>
+          <button
+            *ngIf="!hasOutgoingRequest(user.username)"
+            class="btn btn-sm btn-outline-primary"
+            (click)="sendFriendRequest(user.username)"
+          >
+            Add Friend
+          </button>
+        </ng-container>
+      </div>
     </li>
   </ul>
 
@@ -54,10 +80,10 @@
   <div class="text-center my-4" *ngIf="profileLoading">
     <div class="spinner-border" role="status"></div>
   </div>
-  <app-friend-profile
-    *ngIf="!profileLoading && selectedProfile"
-    [friend]="selectedProfile"
-    (close)="selectedProfile = null">
-    (remove)="removeFriend($event)">
-  </app-friend-profile>
+<app-friend-profile
+  *ngIf="!profileLoading && selectedProfile"
+  [friend]="selectedProfile"
+  (close)="selectedProfile = null"
+  (remove)="removeFriend($event, $event)">
+</app-friend-profile>
 </ng-template>

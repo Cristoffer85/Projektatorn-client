@@ -17,6 +17,7 @@ import { forkJoin } from 'rxjs';
 export class FriendComponent implements OnInit {
   @Output() friendSelected = new EventEmitter<any>();
   @Output() viewProfile = new EventEmitter<any>();
+  @Output() friendRemoved = new EventEmitter<string>();
   @Input() selectedFriend: string | null = null;
 
   friends: any[] = [];
@@ -67,11 +68,7 @@ export class FriendComponent implements OnInit {
   }
 
   get filteredAllUsers() {
-    const pending = this.pendingRequestUsernames;
-    return this.allUsers.filter(u =>
-      !this.isFriend(u.username) &&
-      !pending.includes(u.username)
-    );
+    return this.allUsers.filter(u => !this.isFriend(u.username));
   }
 
 showProfile(friend: any) {
@@ -107,6 +104,13 @@ showProfile(friend: any) {
     });
   }
 
+  withdrawFriendRequest(username: string) {
+    if (!this.username) return;
+    this.friendshipService.withdrawFriendRequest(this.username, username).subscribe(() => {
+      this.outgoingRequests = this.outgoingRequests.filter(u => u !== username);
+    });
+  }
+
   get pendingRequestUsernames(): string[] {
     // Incoming requests: users who sent you a request
     const incoming = this.friendRequests.map(r => r.username);
@@ -115,14 +119,13 @@ showProfile(friend: any) {
     return [...incoming, ...outgoing];
   }
 
-  removeFriend(friendUsername: string, event: Event) {
-    event.stopPropagation();
+  removeFriend(friend: any, event?: Event) {
     if (!this.username) return;
-    this.friendshipService.removeFriend(this.username, friendUsername).subscribe(() => {
-      this.friends = this.friends.filter(f => f.username !== friendUsername);
-      if (this.selectedFriend === friendUsername) {
-        this.friendSelected.emit(null);
-      }
+    this.friendshipService.removeFriend(this.username, friend.username).subscribe(() => {
+      this.friends = this.friends.filter(f => f.username !== friend.username);
+      this.selectedProfile = null;
+      this.friendSelected.emit(null);
+      this.friendRemoved.emit(friend.username); // <-- Add this line
     });
   }
 
