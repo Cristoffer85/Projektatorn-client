@@ -39,11 +39,15 @@ export class ChatComponent {
   async fetchHistory() {
     if (this.username && this.selectedFriend) {
       this.chatService.getChatHistory(this.username, this.selectedFriend.username).subscribe(async history => {
+        console.log('Fetched chat history from backend:', history); // <-- THIS IS WHAT YOU WANT
         const privateKey = await this.e2eeKeyService.getPrivateKey(this.username!);
         this.messages = await Promise.all(history.map(async msg => {
           try {
             let decrypted: string;
-            if (msg.receiver === this.username) {
+            if (msg.contentForReceiver && msg.contentForReceiver.startsWith('{')) {
+              console.log('Trying to hybridDecrypt:', msg.contentForReceiver, privateKey);
+              decrypted = await this.e2eeCryptoService.hybridDecrypt(msg.contentForReceiver, privateKey);
+            } else if (msg.receiver === this.username) {
               decrypted = await this.e2eeCryptoService.decryptMessage(msg.contentForReceiver, privateKey);
             } else if (msg.sender === this.username) {
               decrypted = await this.e2eeCryptoService.decryptMessage(msg.contentForSender, privateKey);
@@ -74,7 +78,6 @@ export class ChatComponent {
 
     // Mark messages as read in backend
     this.chatService.markMessagesAsRead(this.username!, this.selectedFriend.username).subscribe(() => {
-      // Optionally, re-fetch unread senders here if you want to update the list
       this.chatService.getUnreadMessagesSenders(this.username!).subscribe(senders => {
         this.unreadSenders = senders;
         this.unreadService.setUnread(this.unreadSenders.length > 0);

@@ -33,9 +33,20 @@ import { environment } from '../../../environments/environment';
         );
         // Try to fetch public key from backend
         try {
-          await this.getPublicKey(username).toPromise();
+          const publicJwk = await this.getPublicKey(username).toPromise();
+          if (!publicJwk) {
+            throw new Error(`No public key found for ${username}`);
+          }
+          const publicKey = await window.crypto.subtle.importKey(
+            'jwk',
+            publicJwk,
+            { name: 'RSA-OAEP', hash: 'SHA-256' },
+            true,
+            ['encrypt']
+          );
+          return { privateKey, publicKey };
         } catch {
-          // If not found, export and upload public key
+          // If not found, generate and upload new key pair
           const keyPair = await this.generateKeyPair();
           const exported = await window.crypto.subtle.exportKey('jwk', keyPair.privateKey);
           localStorage.setItem(keyName, JSON.stringify(exported));
@@ -43,7 +54,6 @@ import { environment } from '../../../environments/environment';
           await this.http.post(`${environment.apiUrl}/public-key/${username}/public-key`, publicJwk).toPromise();
           return keyPair;
         }
-        return { privateKey, publicKey: null as any };
       }
       // If no private key, generate and upload as before
       const keyPair = await this.generateKeyPair();
@@ -65,6 +75,11 @@ import { environment } from '../../../environments/environment';
         ['decrypt']
       );
     }
+
+  async getOwnPublicKey(username: string): Promise<CryptoKey> {
+    const keyPair = await this.getOrCreateKeyPair(username);
+    return keyPair.publicKey;
+  }
 
   getPublicKey(username: string) {
     return this.http.get<JsonWebKey>(`${environment.apiUrl}/public-key/${username}/public-key`);

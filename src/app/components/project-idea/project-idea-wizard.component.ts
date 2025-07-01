@@ -53,10 +53,7 @@ export class ProjectIdeaWizardComponent implements OnInit {
     if (username) {
       this.friendshipService.getFriends(username).subscribe(friends => {
         this.friends = friends;
-        console.log('Loaded friends:', friends);
       });
-    } else {
-      console.log('No username found, not loading friends.');
     }
   }
 
@@ -64,7 +61,6 @@ export class ProjectIdeaWizardComponent implements OnInit {
   prevStep() { this.step--; }
 
   removeBullet(text: string): string {
-    // Remove all leading *, -, or numbers (with optional whitespace), repeatedly
     return text.replace(/^([\s\*\-\d\.]+)+/, '').trim();
   }
 
@@ -95,11 +91,9 @@ export class ProjectIdeaWizardComponent implements OnInit {
       length: this.length
     }).subscribe({
       next: ideas => {
-        // Filter out lines that are not list items (start with -, *, or a number + dot)
         this.ideas = ideas.filter(line =>
           /^(\s*[-*]\s+|\s*\d+\.\s+)/.test(line)
         ).map(line =>
-          // Remove the bullet/number for a cleaner look
           line.replace(/^(\s*[-*]\s+|\s*\d+\.\s+)/, '')
         );
         this.loading = false;
@@ -120,38 +114,30 @@ export class ProjectIdeaWizardComponent implements OnInit {
     if (this.selectedFriends.length === 0) return;
     const ideasToSend = this.selectedIdeas.map(i => this.ideas[i]).join('\n\n');
     const sender = this.auth.getUsername();
-    const encoder = new TextEncoder();
-    const encoded = encoder.encode(ideasToSend);
-
-    console.log('Sending project ideas:', ideasToSend);
-    console.log('Message length (bytes):', encoded.length);
 
     for (const friendUsername of this.selectedFriends) {
       try {
+        // 1. Get friend's public key
         const publicJwk = await this.e2eeKey.getPublicKey(friendUsername).toPromise();
-        console.log('Public JWK for', friendUsername, publicJwk);
         if (!publicJwk) {
           console.error(`No public key found for ${friendUsername}, skipping.`);
           continue;
         }
-
-        // Quick fix: Check message size for RSA-OAEP (2048-bit key ~190 bytes max)
-        if (encoded.length > 190) {
-          alert('Message too long to send securely to ' + friendUsername + '. Please shorten your project ideas.');
-          continue;
-        }
-
         const publicKey = await this.e2eeCrypto.importPublicKey(publicJwk);
-        const encryptedContent = await this.e2eeCrypto.encryptMessage(ideasToSend, publicKey);
 
-        this.chatService.sendMessage({
-          sender,
-          receiver: friendUsername,
-          content: encryptedContent
-        }).subscribe({
-          next: () => console.log(`Sent to ${friendUsername}`),
-          error: err => console.error(`Failed to send to ${friendUsername}:`, err)
-        });
+        // 2. Encrypt with hybrid encryption
+        const encryptedContent = await this.e2eeCrypto.hybridEncrypt(ideasToSend, publicKey);
+
+        // 3. Send as a chat message
+      this.chatService.sendMessage({
+        sender,
+        receiver: friendUsername,
+        contentForReceiver: encryptedContent, // hybrid-encrypted string
+        contentForSender: '' // or you can also encrypt for sender if you want
+      }).subscribe({
+        next: () => console.log(`Sent to ${friendUsername}`),
+        error: err => console.error(`Failed to send to ${friendUsername}:`, err)
+      });
       } catch (err) {
         console.error(`Failed to send to ${friendUsername}:`, err);
       }
