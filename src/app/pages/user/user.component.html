@@ -6,19 +6,29 @@
     </p>
 
     <div class="mb-3">
-      <label class="form-label">Pick Your Teampersonality Avatar</label>
+      <label class="form-label">Pick your typical teampersonality Avatar:</label>
       <div class="d-flex flex-wrap gap-2">
-        <div *ngFor="let avatar of avatars" class="text-center">
+        <div
+          *ngFor="let avatar of avatars"
+          class="text-center position-relative"
+          style="display:inline-block;"
+        >
           <img
             [src]="avatarBaseUrl + avatar"
             [alt]="avatarDisplayNames[avatar] || avatar"
             width="64"
             height="64"
             class="rounded border"
-            [class.border-primary]="editUser.avatar === avatar"
-            style="cursor:pointer"
+            [ngClass]="{'border-1 border-primary': editUser.avatar === avatar, 'border-1 border-secondary': editUser.avatar !== avatar}"
+            style="cursor:pointer; transition: border 0.2s;"
             (click)="editUser.avatar = avatar"
           />
+          <!-- Overlay for selected avatar -->
+          <div
+            *ngIf="editUser.avatar === avatar"
+            class="position-absolute top-0 start-0 w-100 h-100 rounded"
+            style="background:rgba(200,200,200,0.3); pointer-events:none;"
+          ></div>
         </div>
       </div>
       <div class="mt-2" *ngIf="editUser.avatar">
