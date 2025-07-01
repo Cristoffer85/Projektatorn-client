@@ -17,6 +17,9 @@
         </form>
         <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
       </div>
+      <div class="text-center mt-3">
+        <button class="btn btn-link p-0" type="button" [routerLink]="['/request-password-reset']">Forgot password?</button><br><br>
+      </div>
     </div>
   </div>
 </div>

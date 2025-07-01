@@ -9,13 +9,14 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { NgZone } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import { ChatService } from '../../services/chat.service';
 import { UnreadService } from '../../services/unread.service';
 
 @Component({
   selector: 'app-signin',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './signin.component.html'
 })
 export class SigninComponent {

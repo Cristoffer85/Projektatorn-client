@@ -20,4 +20,12 @@ export class UserService {
   updateUser(username: string, userUpdateDto: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/updateUser/${username}`, userUpdateDto);
   }
+
+  requestPasswordReset(identifier: string) {
+    return this.http.post(`${this.apiUrl}/request-password-reset`, { identifier });
+  }
+
+  resetPassword(token: string, newPassword: string) {
+    return this.http.post(`${this.apiUrl}/reset-password`, { token, newPassword });
+  }
 }

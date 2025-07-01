@@ -12,7 +12,9 @@ import { FormsModule } from '@angular/forms';
 })
 export class SignupComponent {
   username = '';
+  email = '';
   password = '';
+  confirmPassword = ''; // <-- Add this
   error = '';
   loading = false;
 
@@ -22,9 +24,13 @@ export class SignupComponent {
   ) {}
 
   async onSubmit() {
+    if (this.password !== this.confirmPassword) {
+      this.error = 'Passwords do not match';
+      return;
+    }
     this.loading = true;
     this.error = '';
-    this.auth.register(this.username, this.password).subscribe({
+    this.auth.register(this.username, this.email, this.password).subscribe({
       next: async () => {
         this.loading = false;
         alert('Registration successful! Please sign in.');

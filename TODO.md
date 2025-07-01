@@ -17,7 +17,7 @@ Instead add
 
 
 4. When removing friend - make sure all old messages are removed from database as well to optimize database as well/not clank it more than necessary
-
+ - Same goes for all previous reset password tokens (clean up periodically)
 
 
 
