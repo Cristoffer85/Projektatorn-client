@@ -28,7 +28,11 @@ export class UserComponent implements OnInit {
       this.userService.getOneUser(this.username).subscribe({
         next: user => {
           this.user = user;
-          this.editUser = { ...user }; // For editing
+          // Format birthday for input[type="date"]
+          this.editUser = { ...user };
+          if (this.editUser.birthday) {
+            this.editUser.birthday = this.editUser.birthday.substring(0, 10);
+          }
         },
         error: () => {
           this.errorMessage = 'Could not load user info.';

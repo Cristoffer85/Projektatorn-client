@@ -14,7 +14,7 @@ export class SignupComponent {
   username = '';
   email = '';
   password = '';
-  confirmPassword = ''; // <-- Add this
+  confirmPassword = '';
   error = '';
   loading = false;
 

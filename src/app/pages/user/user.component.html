@@ -11,16 +11,27 @@
         <input [(ngModel)]="editUser.email" name="email" class="form-control" type="email" />
       </div>
       <div class="mb-3">
-        <label class="form-label">Birthday</label>
-        <input [(ngModel)]="editUser.birthday" name="birthday" class="form-control" type="date" />
+        <label class="form-label">Birthdate</label>
+        <input
+          [(ngModel)]="editUser.birthday"
+          name="birthday"
+          class="form-control"
+          type="date"
+          min="1900-01-01"
+          max="2099-12-31"
+        />
       </div>
       <div class="mb-3">
-        <label class="form-label">Address</label>
-        <input [(ngModel)]="editUser.address" name="address" class="form-control" />
+        <label class="form-label">Favourite Forest Animal?</label>
+        <input [(ngModel)]="editUser.forestanimal" name="forestanimal" class="form-control" />
       </div>
       <div class="mb-3">
-        <label class="form-label">Telephone</label>
-        <input [(ngModel)]="editUser.telephone" name="telephone" class="form-control" />
+        <label class="form-label">Favourite Sour Snack?</label>
+        <input [(ngModel)]="editUser.soursnack" name="soursnack" class="form-control" />
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Avatar</label>
+        <input [(ngModel)]="editUser.avatar" name="avatar" class="form-control" />
       </div>
       <button class="btn btn-primary" type="submit">Update</button>
     </form>
