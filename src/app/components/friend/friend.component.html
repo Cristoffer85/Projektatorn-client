@@ -110,16 +110,19 @@
               ></i>
             </span>
           </div>
-          <div
-            class="card-body"
-            *ngIf="expandedProjectIndex === i"
-          >
+          <div class="card-body" *ngIf="expandedProjectIndex === i">
             <div *ngIf="removeBullet(proj.idea).includes(':')">
               {{ removeBullet(proj.idea.split(':').slice(1).join(':').trim()) }}
             </div>
             <div *ngIf="!removeBullet(proj.idea).includes(':')">
               {{ removeBullet(proj.idea) }}
             </div>
+            <button
+              class="btn btn-danger btn-sm mt-3"
+              *ngIf="proj.id && proj.owner === username"
+              (click)="removeProject(proj.id!)">
+              Remove
+            </button>
           </div>
         </div>
       </li>

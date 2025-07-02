@@ -186,8 +186,9 @@ export class ChatComponent {
     if (yesIndex !== undefined) {
       const acceptedIdea = message.ideas[+yesIndex];
       this.projectProgress.addProject({
-        friend: message.sender,
-        idea: acceptedIdea
+        friend: this.username!,
+        idea: acceptedIdea,
+        owner: message.sender
       });
     }
   }

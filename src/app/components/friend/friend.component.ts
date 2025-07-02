@@ -7,7 +7,7 @@ import { ChatService } from '../../services/chat.service';
 import { AuthService } from '../../auth/auth.service';
 import { UnreadService } from '../../services/unread.service';
 import { forkJoin } from 'rxjs';
-import { ProjectProgressService } from '../../services/projectprogress.service';
+import { ProjectInProgress, ProjectProgressService } from '../../services/projectprogress.service';
 import { removeBullet } from '../../utils/text-utils';
 
 @Component({
@@ -31,7 +31,7 @@ export class FriendComponent implements OnInit {
   isLoadingFriends = true;
   selectedProfile: any = null;
   profileLoading = false;
-  projectsInProgress: { friend: string, idea: string }[] = [];
+  projectsInProgress: ProjectInProgress[] = [];
   expandedProjectIndex: number | null = null;
   removeBullet = removeBullet;
 
@@ -68,6 +68,7 @@ export class FriendComponent implements OnInit {
         });
 
         // Subscribe to projects in progress ONCE
+        this.projectProgress.loadProjects(this.username);
         this.projectProgress.projects$.subscribe(projects => {
           this.projectsInProgress = projects;
         });
@@ -147,6 +148,15 @@ showProfile(friend: any) {
   }
 
   onProjectAccepted(event: { friend: string, idea: string }) {
-    this.projectsInProgress.push(event);
+    if (!this.username) return;
+    this.projectProgress.addProject({
+      friend: event.friend,
+      idea: event.idea,
+      owner: this.username
+    });
+  }
+
+  removeProject(id: string) {
+    this.projectProgress.removeProject(id);
   }
 }
