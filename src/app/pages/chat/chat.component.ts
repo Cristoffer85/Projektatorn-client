@@ -10,14 +10,22 @@ import { E2eeCryptoService } from '../../services/security/e2eecrypto.service';
 import { firstValueFrom } from 'rxjs';
 import { FriendProfileComponent } from '../friendprofile/friend-profile.component';
 
+  interface ChatMessage {
+    sender: any;
+    isProjectIdeas: boolean;
+    text?: string;
+    ideas?: string[];
+  }
+
 @Component({
   selector: 'app-chat',
   standalone: true,
   imports: [CommonModule, FormsModule, FriendComponent, FriendProfileComponent],
   templateUrl: './chat.component.html'
 })
+
 export class ChatComponent {
-  messages: string[] = [];
+  messages: ChatMessage[] = [];
   newMessage: string = '';
   selectedFriend: any = null;
   username: string | null = null;
@@ -41,40 +49,52 @@ export class ChatComponent {
       this.chatService.getChatHistory(this.username, this.selectedFriend.username).subscribe(async history => {
         const privateKey = await this.e2eeKeyService.getPrivateKey(this.username!);
 
-        // Log the public key derived from your private key
-        const ownPublicKey = await this.e2eeKeyService.getOwnPublicKey(this.username!);
-        const exportedPub = await window.crypto.subtle.exportKey('jwk', ownPublicKey);
-
         this.messages = await Promise.all(history.map(async msg => {
           try {
             let decrypted: string;
             if (msg.receiver === this.username && msg.contentForReceiver && msg.contentForReceiver.startsWith('{')) {
-              // You are the receiver, hybrid-encrypted
               decrypted = await this.e2eeCryptoService.hybridDecrypt(msg.contentForReceiver, privateKey);
             } else if (msg.sender === this.username && msg.contentForSender && msg.contentForSender.startsWith('{')) {
-              // You are the sender, hybrid-encrypted
               decrypted = await this.e2eeCryptoService.hybridDecrypt(msg.contentForSender, privateKey);
             } else if (msg.receiver === this.username) {
               decrypted = await this.e2eeCryptoService.decryptMessage(msg.contentForReceiver, privateKey);
             } else if (msg.sender === this.username) {
               decrypted = await this.e2eeCryptoService.decryptMessage(msg.contentForSender, privateKey);
             } else {
-              return `${msg.sender}: [Unable to decrypt]`;
+              return { sender: msg.sender, text: '[Unable to decrypt]', isProjectIdeas: false };
             }
-            return `${msg.sender}: ${decrypted}`;
+
+            // Detect project idea message (simple check: multiple lines separated by double newlines)
+            const isProjectIdeas = decrypted.includes('\n\n');
+            if (isProjectIdeas) {
+              return {
+                sender: msg.sender,
+                ideas: decrypted.split('\n\n'),
+                isProjectIdeas: true
+              };
+            } else {
+              return {
+                sender: msg.sender,
+                text: decrypted,
+                isProjectIdeas: false
+              };
+            }
           } catch (e) {
-            console.error('Decryption error:', e);
-            return `${msg.sender}: [Unable to decrypt]`;
+            return { sender: msg.sender, text: '[Unable to decrypt]', isProjectIdeas: false };
           }
         }));
       });
     }
-    /*          // Sort of works for clearing all old messages instantly when friend is removed (no manual page refresh needed) 
-                // But, the unread notification bugs out and spontanenously show new messages sometimes even though no new messages have been received.
-    else {      
-      this.messages = [];
+  }
+
+  onIdeaResponse(message: any, ideaIndex: number, accepted: boolean) {
+    const idea = message.ideas[ideaIndex];
+    // Do something with the response, e.g.:
+    if (accepted) {
+      // Handle "Yes"
+    } else {
+      // Handle "No"
     }
-    */
   }
 
   onFriendSelected(friend: any) {

@@ -20,7 +20,20 @@
       <h5 *ngIf="selectedFriend">Chat with {{ selectedFriend.username || selectedFriend }}</h5>
       <div *ngIf="messages.length > 0; else noMessages">
         <div class="border rounded p-2 my-1">
-          <div class="mb-0" style="white-space: pre-wrap;">{{ messages.join('\n') }}</div>
+          <div *ngFor="let message of messages" class="mb-2">
+            <ng-container *ngIf="message.isProjectIdeas; else normalMessage">
+              <div *ngFor="let idea of message.ideas; let i = index" class="mb-1">
+                <strong>{{ message.sender }}:</strong>
+                <span>{{ idea }}</span>
+                <button class="btn btn-success btn-sm ms-2" (click)="onIdeaResponse(message, i, true)">Yes</button>
+                <button class="btn btn-danger btn-sm ms-1" (click)="onIdeaResponse(message, i, false)">No</button>
+              </div>
+            </ng-container>
+            <ng-template #normalMessage>
+              <strong>{{ message.sender }}:</strong>
+              <span>{{ message.text }}</span>
+            </ng-template>
+          </div>
         </div>
       </div>
       <ng-template #noMessages>
