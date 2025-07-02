@@ -109,9 +109,8 @@ export class ChatComponent {
     return yesCount === 1 && noCount === 1;
   }
 
-  acceptAndShareProject(message: any) {
-    // Implement your logic here (e.g., send a message, notify the friend, etc.)
-    alert('Project accepted and shared!');
+  isOwnMessage(message: any): boolean {
+    return message.sender === this.username;
   }
 
   onFriendSelected(friend: any) {
@@ -174,5 +173,10 @@ export class ChatComponent {
       this.newMessage = '';
       this.fetchHistory();
     });
+  }
+
+  acceptAndShareProject(message: any) {
+    // Implement your logic here (e.g., send a message, notify the friend, etc.)
+    alert('Project accepted and shared!');
   }
 }

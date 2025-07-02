@@ -41,16 +41,16 @@
                       <div *ngIf="!removeBullet(idea).includes(':')">
                         {{ removeBullet(idea) }}
                       </div>
-                      <div class="mt-2">
+                      <div class="mt-2" *ngIf="!isOwnMessage(message)">
                         <button
                           class="btn btn-success btn-sm me-2"
-                          [disabled]="responses[messages.indexOf(message)][i] === true"
+                          [disabled]="responses[messages.indexOf(message)]?.[i] === true"
                           (click)="onIdeaResponse(message, i, true)">
                           Yes
                         </button>
                         <button
                           class="btn btn-danger btn-sm"
-                          [disabled]="responses[messages.indexOf(message)][i] === false"
+                          [disabled]="responses[messages.indexOf(message)]?.[i] === false"
                           (click)="onIdeaResponse(message, i, false)">
                           No
                         </button>
@@ -59,6 +59,19 @@
                       </div>
                     </div>
                   </div>
+                  
+                </div>
+                <!-- Show Accept/Share button only for receiver -->
+                <div *ngIf="!isOwnMessage(message) && allIdeasRespondedWithOneYesOneNo(message)" class="mt-2">
+                  <button class="btn btn-primary" (click)="acceptAndShareProject(message)">
+                    Accept and Share project with Friend
+                  </button>
+                </div>
+                <!-- Show awaiting response only for sender -->
+                <div *ngIf="isOwnMessage(message)" class="mt-2">
+                  <button class="btn btn-secondary" disabled>
+                    Awaiting project response from friend...
+                  </button>
                 </div>
 
                 <div *ngIf="allIdeasRespondedWithOneYesOneNo(message)" class="mt-2">
