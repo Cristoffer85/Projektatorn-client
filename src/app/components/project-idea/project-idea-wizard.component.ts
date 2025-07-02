@@ -5,8 +5,8 @@ import { ProjectIdeaService } from '../../services/project.idea.service';
 import { FriendshipService } from '../../services/friendship.service';
 import { AuthService } from '../../auth/auth.service';
 import { ChatService } from '../../services/chat.service';
-import { E2eeCryptoService } from '../../services/security/e2eecrypto.service';
-import { E2eeKeyService } from '../../services/security/e2eekey.service';
+import { E2eeCryptoService } from '../../services/e2ee/e2eecrypto.service';
+import { E2eeKeyService } from '../../services/e2ee/e2eekey.service';
 import { removeBullet } from '../../utils/text-utils';
 
 @Component({
