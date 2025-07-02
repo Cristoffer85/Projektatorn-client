@@ -8,6 +8,7 @@ import { AuthService } from '../../auth/auth.service';
 import { UnreadService } from '../../services/unread.service';
 import { forkJoin } from 'rxjs';
 import { ProjectProgressService } from '../../services/projectprogress.service';
+import { removeBullet } from '../../utils/text-utils';
 
 @Component({
   selector: 'app-friend',
@@ -31,6 +32,8 @@ export class FriendComponent implements OnInit {
   selectedProfile: any = null;
   profileLoading = false;
   projectsInProgress: { friend: string, idea: string }[] = [];
+  expandedProjectIndex: number | null = null;
+  removeBullet = removeBullet;
 
   constructor(
     private friendshipService: FriendshipService,

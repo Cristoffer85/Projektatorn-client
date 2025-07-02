@@ -78,8 +78,50 @@
   <div *ngIf="projectsInProgress.length > 0" class="mt-4">
     <h6>Projects in Progress</h6>
     <ul class="list-group">
-      <li *ngFor="let proj of projectsInProgress" class="list-group-item">
-        <strong>{{ proj.friend }}:</strong> {{ proj.idea }}
+      <li
+        *ngFor="let proj of projectsInProgress; let i = index"
+        class="list-group-item p-0"
+        style="border: none; background: none;"
+      >
+        <div class="card mb-2">
+          <div
+            class="card-header d-flex justify-content-between align-items-center"
+            style="cursor:pointer;"
+            (click)="expandedProjectIndex = expandedProjectIndex === i ? null : i"
+          >
+          <span>
+            <span *ngIf="removeBullet(proj.idea).includes(':')" class="fw-bold">
+              {{ removeBullet(proj.idea.split(':')[0]).toUpperCase() }}
+            </span>
+            <span *ngIf="!removeBullet(proj.idea).includes(':')" class="fw-bold">
+              {{ removeBullet(proj.idea) }}
+            </span>
+            <span
+              class="ms-2 px-2 py-1 fw-bold"
+              style="border-radius: 1rem; background: #fff; border: 4px solid #dee2e6; display: inline-block;"
+            >
+              {{ proj.friend }}
+            </span>
+          </span>
+            <span>
+              <i
+                class="bi"
+                [ngClass]="expandedProjectIndex === i ? 'bi-chevron-up' : 'bi-chevron-down'"
+              ></i>
+            </span>
+          </div>
+          <div
+            class="card-body"
+            *ngIf="expandedProjectIndex === i"
+          >
+            <div *ngIf="removeBullet(proj.idea).includes(':')">
+              {{ removeBullet(proj.idea.split(':').slice(1).join(':').trim()) }}
+            </div>
+            <div *ngIf="!removeBullet(proj.idea).includes(':')">
+              {{ removeBullet(proj.idea) }}
+            </div>
+          </div>
+        </div>
       </li>
     </ul>
   </div>
