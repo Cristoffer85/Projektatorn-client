@@ -37,14 +37,14 @@
           Friend
         </button>
         <ng-container *ngIf="!isFriend(user.username)">
-        <button
-          *ngIf="hasOutgoingRequest(user.username)"
-          class="btn btn-sm btn-secondary bg-light me-1"
-          style="color: #6c757d; border: 1px solid #ced4da;"
-          disabled
-        >
-          Request Sent
-        </button>
+          <button
+            *ngIf="hasOutgoingRequest(user.username)"
+            class="btn btn-sm btn-secondary bg-light me-1"
+            style="color: #6c757d; border: 1px solid #ced4da;"
+            disabled
+          >
+            Request Sent
+          </button>
           <button
             *ngIf="hasOutgoingRequest(user.username)"
             class="btn btn-sm btn-danger text-white"
@@ -74,16 +74,25 @@
       </div>
     </li>
   </ul>
+
+  <div *ngIf="projectsInProgress.length > 0" class="mt-4">
+    <h6>Projects in Progress</h6>
+    <ul class="list-group">
+      <li *ngFor="let proj of projectsInProgress" class="list-group-item">
+        <strong>{{ proj.friend }}:</strong> {{ proj.idea }}
+      </li>
+    </ul>
+  </div>
 </ng-container>
 
 <ng-template #profileView>
   <div class="text-center my-4" *ngIf="profileLoading">
     <div class="spinner-border" role="status"></div>
   </div>
-<app-friend-profile
-  *ngIf="!profileLoading && selectedProfile"
-  [friend]="selectedProfile"
-  (close)="selectedProfile = null"
-  (remove)="removeFriend($event, $event)">
-</app-friend-profile>
+  <app-friend-profile
+    *ngIf="!profileLoading && selectedProfile"
+    [friend]="selectedProfile"
+    (close)="selectedProfile = null"
+    (remove)="removeFriend($event, $event)">
+  </app-friend-profile>
 </ng-template>

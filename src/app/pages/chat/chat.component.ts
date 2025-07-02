@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../services/chat.service';
@@ -10,6 +10,7 @@ import { E2eeCryptoService } from '../../services/security/e2eecrypto.service';
 import { firstValueFrom } from 'rxjs';
 import { FriendProfileComponent } from '../friendprofile/friend-profile.component';
 import { removeBullet } from '../../utils/text-utils';
+import { ProjectProgressService } from '../../services/projectprogress.service';
 
   interface ChatMessage {
     sender: any;
@@ -26,6 +27,7 @@ import { removeBullet } from '../../utils/text-utils';
 })
 
 export class ChatComponent {
+  @Output() projectAccepted = new EventEmitter<{ friend: string, idea: string }>();
   messages: ChatMessage[] = [];
   newMessage: string = '';
   selectedFriend: any = null;
@@ -40,7 +42,8 @@ export class ChatComponent {
     private unreadService: UnreadService,
     private auth: AuthService,
     private e2eeKeyService: E2eeKeyService,
-    private e2eeCryptoService: E2eeCryptoService
+    private e2eeCryptoService: E2eeCryptoService,
+    private projectProgress: ProjectProgressService
   ) {}
 
   ngOnInit() {
@@ -176,7 +179,16 @@ export class ChatComponent {
   }
 
   acceptAndShareProject(message: any) {
-    // Implement your logic here (e.g., send a message, notify the friend, etc.)
-    alert('Project accepted and shared!');
+    const msgIdx = this.messages.indexOf(message);
+    const responses = this.responses[msgIdx];
+    if (!responses) return;
+    const yesIndex = Object.entries(responses).find(([idx, val]) => val === true)?.[0];
+    if (yesIndex !== undefined) {
+      const acceptedIdea = message.ideas[+yesIndex];
+      this.projectProgress.addProject({
+        friend: message.sender,
+        idea: acceptedIdea
+      });
+    }
   }
 }

@@ -7,6 +7,7 @@ import { ChatService } from '../../services/chat.service';
 import { AuthService } from '../../auth/auth.service';
 import { UnreadService } from '../../services/unread.service';
 import { forkJoin } from 'rxjs';
+import { ProjectProgressService } from '../../services/projectprogress.service';
 
 @Component({
   selector: 'app-friend',
@@ -29,39 +30,46 @@ export class FriendComponent implements OnInit {
   isLoadingFriends = true;
   selectedProfile: any = null;
   profileLoading = false;
+  projectsInProgress: { friend: string, idea: string }[] = [];
 
   constructor(
     private friendshipService: FriendshipService,
     private userService: UserService,
     private chatService: ChatService,
     private auth: AuthService,
-    private unreadService: UnreadService
+    private unreadService: UnreadService,
+    private projectProgress: ProjectProgressService
   ) {}
 
-  ngOnInit() {
-    this.username = this.auth.getUsername();
-    if (this.username) {
+    ngOnInit() {
+      this.username = this.auth.getUsername();
+      if (this.username) {
         this.isLoadingFriends = true;
-        // Use forkJoin to fetch friends and users in parallel == so already added friends are not also shown under "All users"
+        // Fetch friends and users in parallel
         forkJoin({
-            friends: this.friendshipService.getFriends(this.username),
-            users: this.userService.getAllUsers()
-            }).subscribe(({ friends, users }) => {
-            this.friends = friends;
-            this.allUsers = users.filter(u => u.username !== this.username);
-            this.isLoadingFriends = false;
+          friends: this.friendshipService.getFriends(this.username),
+          users: this.userService.getAllUsers()
+        }).subscribe(({ friends, users }) => {
+          this.friends = friends;
+          this.allUsers = users.filter(u => u.username !== this.username);
+          this.isLoadingFriends = false;
         });
 
         this.friendshipService.getOutgoingRequests(this.username).subscribe(reqs => {
-        this.outgoingRequests = reqs.map(r => r.username || r);
+          this.outgoingRequests = reqs.map(r => r.username || r);
         });
         this.friendshipService.getFriendRequests(this.username).subscribe(reqs => this.friendRequests = reqs);
         this.chatService.getUnreadMessagesSenders(this.username).subscribe(senders => {
-        this.unreadSenders = senders;
-        this.unreadService.setUnread(this.unreadSenders.length > 0);
+          this.unreadSenders = senders;
+          this.unreadService.setUnread(this.unreadSenders.length > 0);
         });
+
+        // Subscribe to projects in progress ONCE
+        this.projectProgress.projects$.subscribe(projects => {
+          this.projectsInProgress = projects;
+        });
+      }
     }
-  }
 
   isFriend(username: string): boolean {
     return this.friends.some(f => f.username === username);
@@ -133,5 +141,9 @@ showProfile(friend: any) {
     this.unreadSenders = this.unreadSenders.filter(u => u !== friend.username);
     this.unreadService.setUnread(this.unreadSenders.length > 0); // <-- update unread state
     this.friendSelected.emit(friend);
+  }
+
+  onProjectAccepted(event: { friend: string, idea: string }) {
+    this.projectsInProgress.push(event);
   }
 }
