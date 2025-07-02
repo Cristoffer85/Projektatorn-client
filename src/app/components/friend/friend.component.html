@@ -76,7 +76,7 @@
   </ul>
 
   <div *ngIf="projectsInProgress.length > 0" class="mt-4">
-    <h6>Projects in Progress</h6>
+    <h6>Projects in Progress (Owner == handler of project)</h6>
     <ul class="list-group">
       <li
         *ngFor="let proj of projectsInProgress; let i = index"
@@ -101,6 +101,7 @@
               style="border-radius: 1rem; background: #fff; border: 4px solid #dee2e6; display: inline-block;"
             >
               {{ proj.owner === username ? proj.friend : proj.owner }}
+              <span *ngIf="proj.owner !== username" class="ms-1 text-secondary" style="font-weight: normal;">(owner)</span>
             </span>
           </span>
             <span>
