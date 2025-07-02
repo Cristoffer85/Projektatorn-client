@@ -1,0 +1,12 @@
+<div class="container mt-5">
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border" role="status"></div>
+    <div>Verifying...</div>
+  </div>
+  <div *ngIf="success && !loading" class="alert alert-success">
+    Email verified! You may now sign in.
+  </div>
+  <div *ngIf="error && !loading" class="alert alert-danger">
+    {{ error }}
+  </div>
+</div>

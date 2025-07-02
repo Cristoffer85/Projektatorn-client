@@ -33,7 +33,7 @@ export class SignupComponent {
     this.auth.register(this.username, this.email, this.password).subscribe({
       next: async () => {
         this.loading = false;
-        alert('Registration successful! Please sign in.');
+        alert('Registration successful! Please check your email to verify your account before signing in.');
         this.router.navigate(['/signin']);
       },
       error: (err) => {

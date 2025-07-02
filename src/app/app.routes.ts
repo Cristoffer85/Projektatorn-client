@@ -8,11 +8,17 @@ import { AuthGuard } from './auth/auth.guard';
 import { ChatComponent } from './pages/chat/chat.component';
 import { RequestPasswordResetComponent } from './components/request-password-reset/request-password-reset.component';
 import { ResetPasswordComponent } from './components/reset-password/reset-password.component';
+import { VerifyEmailComponent } from './components/verify-email/verify-email.component';
+import { VerifyEmailUpdateComponent } from './components/verify-email-update/verify-email-update.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'signin', component: SigninComponent },
+
   { path: 'signup', component: SignupComponent },
+  { path: 'verify-email', component: VerifyEmailComponent },
+  { path: 'verify-email-update', component: VerifyEmailUpdateComponent },
+
   { path: 'request-password-reset', component: RequestPasswordResetComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
   

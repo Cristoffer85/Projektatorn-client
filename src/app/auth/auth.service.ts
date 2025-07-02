@@ -36,6 +36,22 @@ export class AuthService {
     return this.http.post(`${this.apiUrl}/auth/login`, { username, password });
   }
 
+  verifyEmail(token: string): Observable<any> {
+    console.log('Sending verifyEmail request:', {
+      url: `${this.apiUrl}/auth/verify-email`,
+      body: { token }
+    });
+    return this.http.post(`${this.apiUrl}/auth/verify-email`, { token });
+  }
+
+  verifyEmailChange(token: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/auth/verify-email-change`, { token });
+  }
+
+  isVerified(username: string): Observable<boolean> {
+    return this.http.get<boolean>(`${this.apiUrl}/auth/is-verified?username=${encodeURIComponent(username)}`);
+  }
+
   logout(): void {
     localStorage.removeItem('token');
   }

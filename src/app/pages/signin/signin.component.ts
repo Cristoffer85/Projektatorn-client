@@ -101,7 +101,11 @@ export class SigninComponent {
         }
       },
       error: (err) => {
-        this.error = err.error || 'Login failed';
+        if (err.error && typeof err.error === 'string' && err.error.toLowerCase().includes('not verified')) {
+          this.error = 'Please verify your email before signing in. Check your inbox for the verification link.';
+        } else {
+          this.error = err.error || 'Login failed';
+        }
       }
     });
   }
