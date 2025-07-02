@@ -9,6 +9,7 @@ import { E2eeKeyService } from '../../services/security/e2eekey.service';
 import { E2eeCryptoService } from '../../services/security/e2eecrypto.service';
 import { firstValueFrom } from 'rxjs';
 import { FriendProfileComponent } from '../friendprofile/friend-profile.component';
+import { removeBullet } from '../../utils/text-utils';
 
   interface ChatMessage {
     sender: any;
@@ -32,6 +33,7 @@ export class ChatComponent {
   unreadSenders: string[] = [];
   selectedProfile: any = null;
   responses: { [messageIndex: number]: { [ideaIndex: number]: boolean|null } } = {};
+  removeBullet = removeBullet;
 
   constructor(
     private chatService: ChatService,

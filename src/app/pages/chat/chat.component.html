@@ -16,7 +16,7 @@
         </app-friend-profile>
       </ng-template>
     </div>
-    
+
     <div class="col-md-8">
       <h5 *ngIf="selectedFriend">Chat with {{ selectedFriend.username || selectedFriend }}</h5>
       <div *ngIf="messages.length > 0; else noMessages">
@@ -25,23 +25,40 @@
             <ng-container *ngIf="message.isProjectIdeas; else normalMessage">
               <ng-container *ngIf="message.isProjectIdeas; else normalMessage">
 
-                <div *ngFor="let idea of message.ideas; let i = index" class="mb-1">
-                  <strong>{{ message.sender }}:</strong>
-                  <span>{{ idea }}</span>
-                  <button
-                    class="btn btn-success btn-sm ms-2"
-                    [disabled]="responses[messages.indexOf(message)][i] === true"
-                    (click)="onIdeaResponse(message, i, true)">
-                    Yes
-                  </button>
-                  <button
-                    class="btn btn-danger btn-sm ms-1"
-                    [disabled]="responses[messages.indexOf(message)][i] === false"
-                    (click)="onIdeaResponse(message, i, false)">
-                    No
-                  </button>
-                  <span *ngIf="responses[messages.indexOf(message)]?.[i] === true" class="text-success ms-2">You selected Yes</span>
-                  <span *ngIf="responses[messages.indexOf(message)]?.[i] === false" class="text-danger ms-2">You selected No</span>
+                <div *ngFor="let idea of message.ideas; let i = index" class="mb-3">
+                  <div class="card">
+                    <div
+                      class="card-header bg-dark text-white fw-bold"
+                      *ngIf="removeBullet(idea).includes(':')"
+                      style="border-bottom: none;"
+                    >
+                      {{ removeBullet(idea.split(':')[0]).toUpperCase() }}
+                    </div>
+                    <div class="card-body">
+                      <div *ngIf="removeBullet(idea).includes(':')">
+                        {{ removeBullet(idea.split(':').slice(1).join(':').trim()) }}
+                      </div>
+                      <div *ngIf="!removeBullet(idea).includes(':')">
+                        {{ removeBullet(idea) }}
+                      </div>
+                      <div class="mt-2">
+                        <button
+                          class="btn btn-success btn-sm me-2"
+                          [disabled]="responses[messages.indexOf(message)][i] === true"
+                          (click)="onIdeaResponse(message, i, true)">
+                          Yes
+                        </button>
+                        <button
+                          class="btn btn-danger btn-sm"
+                          [disabled]="responses[messages.indexOf(message)][i] === false"
+                          (click)="onIdeaResponse(message, i, false)">
+                          No
+                        </button>
+                        <span *ngIf="responses[messages.indexOf(message)]?.[i] === true" class="text-success ms-2">You selected Yes</span>
+                        <span *ngIf="responses[messages.indexOf(message)]?.[i] === false" class="text-danger ms-2">You selected No</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
                 <div *ngIf="allIdeasRespondedWithOneYesOneNo(message)" class="mt-2">

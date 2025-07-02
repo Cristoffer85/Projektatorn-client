@@ -7,6 +7,7 @@ import { AuthService } from '../../auth/auth.service';
 import { ChatService } from '../../services/chat.service';
 import { E2eeCryptoService } from '../../services/security/e2eecrypto.service';
 import { E2eeKeyService } from '../../services/security/e2eekey.service';
+import { removeBullet } from '../../utils/text-utils';
 
 @Component({
   selector: 'app-project-idea-wizard',
@@ -25,6 +26,7 @@ export class ProjectIdeaWizardComponent implements OnInit {
   selectedIdeas: number[] = [];
   friends: any[] = [];
   selectedFriends: string[] = [];
+  removeBullet = removeBullet;
 
   constructor(
     private projectIdeaService: ProjectIdeaService,
@@ -59,10 +61,6 @@ export class ProjectIdeaWizardComponent implements OnInit {
 
   nextStep() { this.step++; }
   prevStep() { this.step--; }
-
-  removeBullet(text: string): string {
-    return text.replace(/^([\s\*\-\d\.]+)+/, '').trim();
-  }
 
   toggleSelect(index: number) {
     if (this.selectedIdeas.includes(index)) {
