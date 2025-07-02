@@ -21,7 +21,9 @@ Instead add
 
 
 
-5. Add ability to send 2 selected project idea to friend in friendlist as message - and they can choose to accept or decline? Also add an event-sending notification to receiving users email (make adding email mandatory on registration?//Done) so they receive a notification there when a new project idea has entered its inbox on Projektatorn.se?
+5. Add ability to send 2 selected project idea to friend in friendlist as message - and they can choose to accept or decline?  //Done
+    - Also add an event-sending notification to receiving users email (make adding email mandatory on registration?)  //Done 
+    - so they receive a notification there when a new project idea has entered its inbox on Projektatorn.se?
 
 --------------------------------------------------
 
@@ -31,5 +33,3 @@ Instead add
 
 7. When sent request to friend request/withdraw appears correct in "All users" list for sending user -
    But for receiving user - user who sent friend request appearing in both "Friend request" and "All users" making it able to send a friend request while have pending request.
-
-8. Avatar preview in navbar disappeared again upon adding withdraw friend request etc - must have changed something
