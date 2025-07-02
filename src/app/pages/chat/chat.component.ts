@@ -39,13 +39,11 @@ export class ChatComponent {
   async fetchHistory() {
     if (this.username && this.selectedFriend) {
       this.chatService.getChatHistory(this.username, this.selectedFriend.username).subscribe(async history => {
-        console.log('Fetched chat history from backend:', history);
         const privateKey = await this.e2eeKeyService.getPrivateKey(this.username!);
 
         // Log the public key derived from your private key
         const ownPublicKey = await this.e2eeKeyService.getOwnPublicKey(this.username!);
         const exportedPub = await window.crypto.subtle.exportKey('jwk', ownPublicKey);
-        console.log('Sender public key derived from private key:', exportedPub);
 
         this.messages = await Promise.all(history.map(async msg => {
           try {
