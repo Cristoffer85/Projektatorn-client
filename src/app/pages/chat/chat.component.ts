@@ -192,4 +192,15 @@ export class ChatComponent {
       });
     }
   }
+
+  isProjectInProgress(message: any): boolean {
+    if (!this.projectProgress.projectsSubject?.value) return false;
+    return this.projectProgress.projectsSubject.value.some(proj =>
+      (
+        (proj.owner === message.sender && proj.friend === this.username) ||
+        (proj.owner === this.username && proj.friend === message.sender)
+      ) &&
+      message.ideas?.some((idea: string) => removeBullet(idea) === removeBullet(proj.idea))
+    );
+  }
 }

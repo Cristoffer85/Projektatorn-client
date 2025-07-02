@@ -24,9 +24,10 @@ Instead add
 
 --------------------------------------------------
 
+6. When selected 2 projects from project-idea-wizard and clicked send make sure notification of "Projects sent!" appears as visual confirmation instead of "Selected Friends" button and after 3 seconds return to unselected friend again and "Selected Friends" button appear again (not usable until friend select again of course)
 
-6. Fix mail confirmation first page after registration - to ensure mail is correct (in case of lost password)
+7. Fix mail confirmation first page after registration - to ensure mail is correct (in case of lost password)
     - should also apply when changing mail
 
-7. When sent request to friend request/withdraw appears correct in "All users" list for sending user -
+8. When sent request to friend request/withdraw appears correct in "All users" list for sending user -
    But for receiving user - user who sent friend request appearing in both "Friend request" and "All users" making it able to send a friend request while have pending request.

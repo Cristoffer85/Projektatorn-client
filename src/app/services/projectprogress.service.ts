@@ -12,7 +12,7 @@ export interface ProjectInProgress {
 
 @Injectable({ providedIn: 'root' })
 export class ProjectProgressService {
-  private projectsSubject = new BehaviorSubject<ProjectInProgress[]>([]);
+  public projectsSubject = new BehaviorSubject<ProjectInProgress[]>([]);
   projects$ = this.projectsSubject.asObservable();
 
   constructor(private http: HttpClient) {}

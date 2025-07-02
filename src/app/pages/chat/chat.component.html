@@ -23,7 +23,6 @@
         <div class="border rounded p-2 my-1">
           <div *ngFor="let message of messages" class="mb-2">
             <ng-container *ngIf="message.isProjectIdeas; else normalMessage">
-              <!-- Project Ideas Container -->
               <div class="card border-primary mb-3">
                 <div class="card-header bg-primary text-white">
                   {{ isOwnMessage(message) ? 'You sent these project ideas:' : message.sender + ' sent you project ideas:' }}
@@ -45,7 +44,8 @@
                         <div *ngIf="!removeBullet(idea).includes(':')">
                           {{ removeBullet(idea) }}
                         </div>
-                        <div class="mt-2" *ngIf="!isOwnMessage(message)">
+                        <!-- Only show Yes/No if project not in progress -->
+                        <div class="mt-2" *ngIf="!isOwnMessage(message) && !isProjectInProgress(message)">
                           <button
                             class="btn btn-success btn-sm me-2"
                             [disabled]="responses[messages.indexOf(message)]?.[i] === true"
@@ -64,21 +64,30 @@
                       </div>
                     </div>
                   </div>
-                  <!-- Show Accept/Share button only for receiver -->
-                  <div *ngIf="!isOwnMessage(message) && allIdeasRespondedWithOneYesOneNo(message)" class="mt-2">
+                  <!-- Show Accept/Share button only for receiver and if not in progress -->
+                  <div *ngIf="!isOwnMessage(message) && allIdeasRespondedWithOneYesOneNo(message) && !isProjectInProgress(message)" class="mt-2">
                     <button class="btn btn-primary" (click)="acceptAndShareProject(message)">
                       Accept and Share project with Friend
                     </button>
                   </div>
-                  <!-- Show awaiting response only for sender -->
-                  <div *ngIf="isOwnMessage(message)" class="mt-2">
+                  <!-- Show awaiting response only for sender and if not in progress -->
+                  <div *ngIf="isOwnMessage(message) && !isProjectInProgress(message)" class="mt-2">
                     <button class="btn btn-secondary" disabled>
                       Awaiting project response from friend...
+                    </button>
+                  </div>
+                  <!-- Show accepted message if project is in progress -->
+                  <div *ngIf="isProjectInProgress(message)" class="mt-2">
+                    <button class="btn btn-outline-success" disabled>
+                      Project accepted by both parts
+                      <span class="ms-2 text-success" style="font-size: 1.2em;">&#10003;</span>
+                      – start coding and having fun!
                     </button>
                   </div>
                 </div>
               </div>
             </ng-container>
+
             <ng-template #normalMessage>
               <strong>{{ message.sender }}:</strong>
               <span>{{ message.text }}</span>
