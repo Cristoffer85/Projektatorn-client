@@ -18,12 +18,9 @@ Instead add
 
 
 
-
-
-
 5. Add ability to send 2 selected project idea to friend in friendlist as message - and they can choose to accept or decline?  //Done
     - Also add an event-sending notification to receiving users email (make adding email mandatory on registration?)  //Done 
-    - so they receive a notification there when a new project idea has entered its inbox on Projektatorn.se?
+    - so they receive a notification there when a new project idea has entered its inbox on Projektatorn.se?  //Done
 
 --------------------------------------------------
 
