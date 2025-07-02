@@ -125,19 +125,32 @@ export class ProjectIdeaWizardComponent implements OnInit {
         }
         const publicKey = await this.e2eeCrypto.importPublicKey(publicJwk);
 
-        // 2. Encrypt with hybrid encryption
+        // 2. Encrypt with hybrid encryption for receiver
         const encryptedContent = await this.e2eeCrypto.hybridEncrypt(ideasToSend, publicKey);
 
-        // 3. Send as a chat message
-      this.chatService.sendMessage({
-        sender,
-        receiver: friendUsername,
-        contentForReceiver: encryptedContent, // hybrid-encrypted string
-        contentForSender: '' // or you can also encrypt for sender if you want
-      }).subscribe({
-        next: () => console.log(`Sent to ${friendUsername}`),
-        error: err => console.error(`Failed to send to ${friendUsername}:`, err)
-      });
+        // 3. Encrypt with hybrid encryption for sender (yourself)
+        const senderUsername = this.auth.getUsername();
+        if (!senderUsername) {
+          console.error('No sender username found.');
+          continue;
+        }
+        const ownPublicKey = await this.e2eeKey.getOwnPublicKey(senderUsername);
+        // Log the public key used for encrypting for sender
+        const exportedPub = await window.crypto.subtle.exportKey('jwk', ownPublicKey);
+        console.log('Sender public key used for encrypting:', exportedPub);
+
+        const encryptedContentForSender = await this.e2eeCrypto.hybridEncrypt(ideasToSend, ownPublicKey);
+
+        // 4. Send as a chat message
+        this.chatService.sendMessage({
+          sender,
+          receiver: friendUsername,
+          contentForReceiver: encryptedContent,         // hybrid-encrypted for receiver
+          contentForSender: encryptedContentForSender   // hybrid-encrypted for sender
+        }).subscribe({
+          next: () => console.log(`Sent to ${friendUsername}`),
+          error: err => console.error(`Failed to send to ${friendUsername}:`, err)
+        });
       } catch (err) {
         console.error(`Failed to send to ${friendUsername}:`, err);
       }

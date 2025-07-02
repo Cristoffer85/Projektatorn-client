@@ -39,14 +39,23 @@ export class ChatComponent {
   async fetchHistory() {
     if (this.username && this.selectedFriend) {
       this.chatService.getChatHistory(this.username, this.selectedFriend.username).subscribe(async history => {
-        console.log('Fetched chat history from backend:', history); // <-- THIS IS WHAT YOU WANT
+        console.log('Fetched chat history from backend:', history);
         const privateKey = await this.e2eeKeyService.getPrivateKey(this.username!);
+
+        // Log the public key derived from your private key
+        const ownPublicKey = await this.e2eeKeyService.getOwnPublicKey(this.username!);
+        const exportedPub = await window.crypto.subtle.exportKey('jwk', ownPublicKey);
+        console.log('Sender public key derived from private key:', exportedPub);
+
         this.messages = await Promise.all(history.map(async msg => {
           try {
             let decrypted: string;
-            if (msg.contentForReceiver && msg.contentForReceiver.startsWith('{')) {
-              console.log('Trying to hybridDecrypt:', msg.contentForReceiver, privateKey);
+            if (msg.receiver === this.username && msg.contentForReceiver && msg.contentForReceiver.startsWith('{')) {
+              // You are the receiver, hybrid-encrypted
               decrypted = await this.e2eeCryptoService.hybridDecrypt(msg.contentForReceiver, privateKey);
+            } else if (msg.sender === this.username && msg.contentForSender && msg.contentForSender.startsWith('{')) {
+              // You are the sender, hybrid-encrypted
+              decrypted = await this.e2eeCryptoService.hybridDecrypt(msg.contentForSender, privateKey);
             } else if (msg.receiver === this.username) {
               decrypted = await this.e2eeCryptoService.decryptMessage(msg.contentForReceiver, privateKey);
             } else if (msg.sender === this.username) {
