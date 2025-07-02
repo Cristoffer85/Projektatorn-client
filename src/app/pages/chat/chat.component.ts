@@ -31,6 +31,7 @@ export class ChatComponent {
   username: string | null = null;
   unreadSenders: string[] = [];
   selectedProfile: any = null;
+  responses: { [messageIndex: number]: { [ideaIndex: number]: boolean|null } } = {};
 
   constructor(
     private chatService: ChatService,
@@ -88,13 +89,27 @@ export class ChatComponent {
   }
 
   onIdeaResponse(message: any, ideaIndex: number, accepted: boolean) {
-    const idea = message.ideas[ideaIndex];
-    // Do something with the response, e.g.:
-    if (accepted) {
-      // Handle "Yes"
-    } else {
-      // Handle "No"
+    const msgIdx = this.messages.indexOf(message);
+    if (!this.responses[msgIdx]) {
+      this.responses[msgIdx] = {};
     }
+    this.responses[msgIdx][ideaIndex] = accepted;
+  }
+
+  allIdeasRespondedWithOneYesOneNo(message: any): boolean {
+    const msgIdx = this.messages.indexOf(message);
+    const resp = this.responses[msgIdx];
+    if (!resp) return false;
+    const values = Object.values(resp);
+    if (values.length !== message.ideas.length) return false;
+    const yesCount = values.filter(v => v === true).length;
+    const noCount = values.filter(v => v === false).length;
+    return yesCount === 1 && noCount === 1;
+  }
+
+  acceptAndShareProject(message: any) {
+    // Implement your logic here (e.g., send a message, notify the friend, etc.)
+    alert('Project accepted and shared!');
   }
 
   onFriendSelected(friend: any) {
