@@ -80,7 +80,14 @@ export class FriendComponent implements OnInit {
   }
 
   get filteredAllUsers() {
-    return this.allUsers.filter(u => !this.isFriend(u.username));
+    // Exclude self and friends
+    return this.allUsers.filter(u =>
+      u.username !== this.username &&
+      !this.isFriend(u.username) &&
+      // If I have sent a request, still show them (so I can withdraw)
+      // If I have received a request from them, hide them
+      !this.friendRequests.some(r => r.username === u.username)
+    );
   }
 
   showProfile(user: any) {
