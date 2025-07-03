@@ -31,6 +31,7 @@
             Sign Up
           </button>
         </form>
+        <div *ngIf="success" class="alert alert-success mt-3">{{ success }}</div>
         <div *ngIf="error" class="alert alert-danger mt-3">{{ error }}</div>
       </div>
     </div>

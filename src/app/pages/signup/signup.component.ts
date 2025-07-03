@@ -17,6 +17,7 @@ export class SignupComponent {
   confirmPassword = '';
   error = '';
   loading = false;
+  success = '';
 
   constructor(
     private auth: AuthService,
@@ -41,23 +42,28 @@ export class SignupComponent {
   async onSubmit() {
     if (this.password !== this.confirmPassword) {
       this.error = 'Passwords do not match';
+      this.success = '';
       return;
     }
     if (!this.isPasswordStrong(this.password)) {
       this.error = 'Password is not strong enough';
+      this.success = '';
       return;
     }
     this.loading = true;
     this.error = '';
+    this.success = '';
     this.auth.register(this.username, this.email, this.password).subscribe({
       next: async () => {
         this.loading = false;
-        alert('Registration successful! Please check your email to verify your account before signing in.');
-        this.router.navigate(['/signin']);
+        this.success = 'Registration successful! Please check your email to verify your account before signing in.';
+        // Optionally, you can redirect after a short delay:
+        setTimeout(() => this.router.navigate(['/signin']), 2500);
       },
       error: (err) => {
         this.loading = false;
         this.error = err.error || 'Registration failed';
+        this.success = '';
       }
     });
   }
