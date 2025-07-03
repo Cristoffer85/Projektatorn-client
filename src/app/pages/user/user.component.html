@@ -39,7 +39,7 @@
     <form *ngIf="editUser" (ngSubmit)="updateUser()" class="mt-4">
       <div class="mb-3">
         <label class="form-label">Email</label>
-        <input [(ngModel)]="editUser.email" name="email" class="form-control" type="email" />
+        <input [(ngModel)]="editUser.email" name="email" class="form-control bg-light" type="email" disabled />
       </div>
       <div class="mb-3">
         <label class="form-label">Birthdate</label>

@@ -73,7 +73,7 @@ export class UserComponent implements OnInit {
         this.user = updated;
         this.successMessage = 'Profile updated!';
         this.errorMessage = '';
-        this.userService.setUserProfile(updated); // Notify others (like navbar)
+        this.userService.setUserProfile(updated);
       },
       error: () => {
         this.errorMessage = 'Update failed.';

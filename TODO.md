@@ -17,12 +17,16 @@ Instead add
 
 6. Fix mail verification first page after registration - to ensure mail is correct (in case of lost password) // Done (w. workaround!! == add username param to mail link, only way for now..)
 
+******
+7. Receive notification mail when there new project idea has entered its inbox on Projektatorn.se? // Should be Done, test
+******
 
-7. When selected 2 projects from project-idea-wizard and clicked send make sure notification of "Projects sent!" appears as visual confirmation instead of "Selected Friends" button and after few seconds return to unselected friend again and "Selected Friends" button appear again (not usable until friend select again of course) 
+8. Fix mail verification when changing mail in user update // Done commented out for now since cant get verification properly work with frontend - locally it works.
+
+9. When selected 2 projects from project-idea-wizard and clicked send make sure notification of "Projects sent!" appears as visual confirmation instead of "Selected Friends" button and after few seconds return to unselected friend again and "Selected Friends" button appear again (not usable until friend select again of course) 
 - //Done for receiver/friend
 --------------------------------------------------
-8. But not for sender/owner still doesnt work
-9. Fix mail verification when changing mail in user update (untested yet)
-10. When sent request to friend request/withdraw appears correct in "All users" list for sending user -
+10. But not for sender/owner still doesnt work
+
+11. When sent request to friend request/withdraw appears correct in "All users" list for sending user -
    But for receiving user - user who sent friend request appearing in both "Friend request" and "All users" making it able to send a friend request while have pending request.
-11. Receive notification mail when there new project idea has entered its inbox on Projektatorn.se? // Done in backend but not front
