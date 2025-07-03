@@ -8,6 +8,7 @@ import { ChatService } from '../../services/chat.service';
 import { E2eeCryptoService } from '../../services/e2ee/e2eecrypto.service';
 import { E2eeKeyService } from '../../services/e2ee/e2eekey.service';
 import { removeBullet } from '../../utils/text-utils';
+import { ProjectProgressService } from '../../services/project.service';
 
 @Component({
   selector: 'app-project-idea-wizard',
@@ -35,7 +36,8 @@ export class ProjectIdeaWizardComponent implements OnInit {
     private chatService: ChatService,
     private auth: AuthService,
     private e2eeCrypto: E2eeCryptoService,
-    private e2eeKey: E2eeKeyService
+    private e2eeKey: E2eeKeyService,
+    private projectProgress: ProjectProgressService
   ) {}
 
   ngOnInit() {
@@ -136,6 +138,16 @@ export class ProjectIdeaWizardComponent implements OnInit {
           receiver: friendUsername,
           contentForReceiver: encryptedContent,
           contentForSender: encryptedContentForSender
+        }).subscribe({
+          next: () => {},
+          error: () => {}
+        });
+
+        // 5. Also send project to backend to trigger mail
+        this.projectProgress.sendProjectToFriend({
+          friend: friendUsername,
+          idea: ideasToSend,
+          owner: sender!
         }).subscribe({
           next: () => {},
           error: () => {}

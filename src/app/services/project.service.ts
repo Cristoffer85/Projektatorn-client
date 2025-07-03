@@ -22,6 +22,10 @@ export class ProjectProgressService {
       .subscribe(projects => this.projectsSubject.next(projects));
   }
 
+  sendProjectToFriend(project: ProjectInProgress) {
+    return this.http.post<ProjectInProgress>(`${environment.apiUrl}/projects/send-to-friend`, project);
+  }
+
   addProject(project: ProjectInProgress) {
     this.http.post<ProjectInProgress>(`${environment.apiUrl}/projects/add`, project)
       .subscribe(saved => {
