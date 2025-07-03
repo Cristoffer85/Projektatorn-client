@@ -9,7 +9,7 @@ import { FormsModule } from '@angular/forms';
   selector: 'app-user',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './user.component.html'
+  templateUrl: './user-account.component.html'
 })
 export class UserComponent implements OnInit {
   username: string | null = null;

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class E2eeCryptoService {
-  // --- Key import from database ---
+  // ########## Key import from database ##########
   async importPublicKey(jwk: JsonWebKey): Promise<CryptoKey> {
     return window.crypto.subtle.importKey(
       'jwk',
@@ -23,7 +23,7 @@ export class E2eeCryptoService {
     );
   }
 
-  // --- Simple RSA encryption ---
+  // ########## Simple RSA encryption ##########
   async encryptMessage(message: string, publicKey: CryptoKey): Promise<string> {
     const enc = new TextEncoder();
     const encrypted = await window.crypto.subtle.encrypt(
@@ -44,7 +44,7 @@ export class E2eeCryptoService {
     return new TextDecoder().decode(decrypted);
   }
 
-  // --- Hybrid encryption (AES-GCM + RSA-OAEP) ---
+  // ########## Hybrid encryption (AES-GCM + RSA-OAEP) For bigger files/more bytes ##########
   async hybridEncrypt(plainText: string, rsaPublicKey: CryptoKey): Promise<string> {
     const aesKey = await window.crypto.subtle.generateKey(
       { name: 'AES-GCM', length: 256 },
@@ -102,7 +102,7 @@ export class E2eeCryptoService {
     }
   }
 
-  // --- Password-based encryption for private key backup ---
+  // ########## Password-based encryption for private key backup ##########
   private async deriveKeyFromPassword(password: string, salt: Uint8Array): Promise<CryptoKey> {
     const enc = new TextEncoder();
     const keyMaterial = await window.crypto.subtle.importKey(

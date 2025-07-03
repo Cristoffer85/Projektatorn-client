@@ -47,3 +47,8 @@ Instead add
 
     - share links somewhere, to linkedin?
     - after done use the history endpoint in frontend service already present to save to database. Make able to click that
+
+18. Nice up actual project description sent in mail
+
+19. Friend +
+    Chat components are the largest. Try to refactor and break these down into smaller pieces.

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FriendProfileComponent } from '../../pages/friendprofile/friend-profile.component';
+import { FriendProfileComponent } from '../friendprofile/friend-profile.component';
 import { FriendshipService } from '../../services/friendship.service';
 import { UserService } from '../../services/user.service';
 import { ChatService } from '../../services/chat.service';
@@ -14,7 +14,7 @@ import { removeBullet } from '../../utils/text-utils';
   selector: 'app-friend',
   standalone: true,
   imports: [CommonModule, FriendProfileComponent],
-  templateUrl: './friend.component.html'
+  templateUrl: './master-dashboard.component.html'
 })
 export class FriendComponent implements OnInit {
   @Output() friendsChanged = new EventEmitter<any[]>();

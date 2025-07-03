@@ -5,8 +5,8 @@ import { ProjectIdeaService } from '../../services/api.service';
 import { FriendshipService } from '../../services/friendship.service';
 import { AuthService } from '../../auth/auth.service';
 import { ChatService } from '../../services/chat.service';
-import { E2eeCryptoService } from '../../services/e2ee/e2eecrypto.service';
-import { E2eeKeyService } from '../../services/e2ee/e2eekey.service';
+import { E2eeCryptoService } from '../../encryption/e2e-encryption.service';
+import { E2eeKeyService } from '../../encryption/e2e-key.service';
 import { removeBullet } from '../../utils/text-utils';
 import { ProjectProgressService } from '../../services/project.service';
 
@@ -14,7 +14,7 @@ import { ProjectProgressService } from '../../services/project.service';
   selector: 'app-project-idea-wizard',
   standalone: true,
   imports: [CommonModule, FormsModule],
-  templateUrl: './project-idea-wizard.component.html'
+  templateUrl: './project-generator.component.html'
 })
 export class ProjectIdeaWizardComponent implements OnInit {
   step = 1;
