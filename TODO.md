@@ -34,9 +34,9 @@ Instead add
 
 13. In chatcomponent - remove old project-proposal message when it is accepted and stored in project_in_progress //Done
 
---------------------------------------------------
+14. Make password requirement stronger  // Done
 
-14. Make password requirement stronger
+--------------------------------------------------
 15. Bug one person changing avatar changes for other in navbar preview even though other value stored to database
 16. When pending projects moved to in progress dont get removed from database (its because they generate different id:s becuase theyre in different
     collections in database. Find a fix for this later if feel like it.)

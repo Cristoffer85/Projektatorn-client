@@ -23,9 +23,28 @@ export class SignupComponent {
     private router: Router
   ) {}
 
+  isPasswordStrong(password: string): boolean {
+    const minLength = /.{8,}/;
+    const upper = /[A-Z]/;
+    const lower = /[a-z]/;
+    const digit = /[0-9]/;
+    const special = /[!@#$%^&*(),.?":{}|<>]/;
+    return (
+      minLength.test(password) &&
+      upper.test(password) &&
+      lower.test(password) &&
+      digit.test(password) &&
+      special.test(password)
+    );
+  }
+
   async onSubmit() {
     if (this.password !== this.confirmPassword) {
       this.error = 'Passwords do not match';
+      return;
+    }
+    if (!this.isPasswordStrong(this.password)) {
+      this.error = 'Password is not strong enough';
       return;
     }
     this.loading = true;
