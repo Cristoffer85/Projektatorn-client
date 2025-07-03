@@ -10,8 +10,10 @@ import { environment } from '../../../environments/environment';
 })
 export class FriendProfileComponent {
   @Input() friend: any;
+  @Input() isFriend: boolean = false;
   @Output() close = new EventEmitter<void>();
   @Output() remove = new EventEmitter<any>();
+  @Output() addFriend = new EventEmitter<any>();
 
   showConfirm = false;
   avatarBaseUrl = environment.apiUrl + '/avatars/';

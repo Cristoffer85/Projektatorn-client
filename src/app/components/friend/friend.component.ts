@@ -83,14 +83,17 @@ export class FriendComponent implements OnInit {
     return this.allUsers.filter(u => !this.isFriend(u.username));
   }
 
-showProfile(friend: any) {
-  this.profileLoading = true;
-  this.userService.getOneUser(friend.username).subscribe(profile => {
-    this.selectedProfile = profile;
-    this.profileLoading = false;
-    this.friendSelected.emit(friend);
-  });
-}
+  showProfile(user: any) {
+    this.profileLoading = true;
+    this.userService.getOneUser(user.username).subscribe(profile => {
+      this.selectedProfile = {
+        ...profile,
+        isFriend: this.isFriend(user.username)
+      };
+      this.profileLoading = false;
+      this.friendSelected.emit(user);
+    });
+  }
 
   hasUnreadFrom(username: string): boolean {
     return this.unreadSenders.includes(username);

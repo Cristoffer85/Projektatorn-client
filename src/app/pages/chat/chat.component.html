@@ -98,16 +98,30 @@
       <ng-template #noMessages>
         <p class="text-muted">Select friend in list to view messages.</p>
       </ng-template>
-      <form class="d-flex mt-3" (ngSubmit)="sendMessage()" *ngIf="selectedFriend">
-        <input
-          [(ngModel)]="newMessage"
-          name="message"
-          class="form-control me-2"
-          placeholder="Type a message..."
-          autocomplete="off"
-        />
-        <button class="btn btn-primary" type="submit">Send</button>
-      </form>
+        <form
+          class="d-flex mt-3"
+          (ngSubmit)="sendMessage()"
+          *ngIf="selectedFriend"
+        >
+          <input
+            [(ngModel)]="newMessage"
+            name="message"
+            class="form-control me-2"
+            placeholder="Type a message..."
+            autocomplete="off"
+            [disabled]="!isSelectedFriendAFriend()"
+          />
+          <button
+            class="btn btn-primary"
+            type="submit"
+            [disabled]="!isSelectedFriendAFriend()"
+          >
+            Send
+          </button>
+        </form>
+          <div *ngIf="selectedFriend && !isSelectedFriendAFriend()" class="alert alert-info mt-2">
+            You must be friends to chat.
+          </div>
     </div>
   </div>
 </div>

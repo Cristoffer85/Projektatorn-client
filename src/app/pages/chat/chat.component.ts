@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ChatService } from '../../services/chat.service';
@@ -28,6 +28,7 @@ import { ProjectProgressService } from '../../services/project.service';
 
 export class ChatComponent {
   @Output() projectAccepted = new EventEmitter<{ friend: string, idea: string }>();
+  @Input() friends: any[] = [];
   messages: ChatMessage[] = [];
   newMessage: string = '';
   selectedFriend: any = null;
@@ -129,6 +130,10 @@ export class ChatComponent {
         this.unreadService.setUnread(this.unreadSenders.length > 0);
       });
     });
+  }
+
+  isSelectedFriendAFriend(): boolean {
+    return this.selectedFriend && this.friends?.some(f => f.username === this.selectedFriend.username);
   }
 
   onViewProfile(friend: any) {

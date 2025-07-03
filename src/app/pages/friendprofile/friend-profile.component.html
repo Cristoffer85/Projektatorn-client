@@ -21,9 +21,16 @@
     <button
       class="btn btn-danger mt-3 w-100"
       (click)="confirmRemove()"
-      *ngIf="friend"
+      *ngIf="isFriend"
     >
       Remove Friend
+    </button>
+    <button
+      class="btn btn-primary mt-3 w-100"
+      (click)="addFriend.emit(friend)"
+      *ngIf="!isFriend"
+    >
+      Add Friend
     </button>
   </div>
 </div>
