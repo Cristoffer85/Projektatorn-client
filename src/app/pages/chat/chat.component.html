@@ -46,7 +46,7 @@
                           {{ removeBullet(idea) }}
                         </div>
                         <!-- Only show Yes/No if project not in progress -->
-                        <div class="mt-2" *ngIf="!isOwnMessage(message) && !isProjectInProgress(message)">
+                        <div class="mt-2" *ngIf="!isOwnMessage(message)">
                           <button
                             class="btn btn-success btn-sm me-2"
                             [disabled]="responses[messages.indexOf(message)]?.[i] === true"
@@ -65,8 +65,8 @@
                       </div>
                     </div>
                   </div>
-                  <!-- Show Accept/Share button only for receiver and if not in progress -->
-                  <div *ngIf="!isOwnMessage(message) && allIdeasRespondedWithOneYesOneNo(message) && !isProjectInProgress(message)" class="mt-2">
+                  <!-- Show Accept/Share button only for receiver -->
+                  <div *ngIf="!isOwnMessage(message) && allIdeasRespondedWithOneYesOneNo(message)" class="mt-2">
                     <button class="btn btn-primary" (click)="acceptAndShareProject(message)">
                       Accept and Share project with Friend
                     </button>
