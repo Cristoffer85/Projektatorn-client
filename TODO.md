@@ -30,3 +30,5 @@ Instead add
 
 11. When sent request to friend request/withdraw appears correct in "All users" list for sending user -
    But for receiving user - user who sent friend request appearing in both "Friend request" and "All users" making it able to send a friend request while have pending request.
+
+12. Bug one person changing avatar changes for other in navbar preview even though other value stored to database

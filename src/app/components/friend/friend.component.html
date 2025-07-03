@@ -39,14 +39,6 @@
           <ng-container *ngIf="!isFriend(user.username)">
             <button
               *ngIf="hasOutgoingRequest(user.username)"
-              class="btn btn-sm btn-secondary bg-light me-1"
-              style="color: #6c757d; border: 1px solid #ced4da;"
-              disabled
-            >
-              Request Sent
-            </button>
-            <button
-              *ngIf="hasOutgoingRequest(user.username)"
               class="btn btn-sm btn-danger text-white me-1"
               (click)="withdrawFriendRequest(user.username)"
             >
@@ -139,6 +131,7 @@
     *ngIf="!profileLoading && selectedProfile"
     [friend]="selectedProfile"
     (close)="selectedProfile = null"
-    (remove)="removeFriend($event, $event)">
+    (remove)="removeFriend($event, $event)"
+    (addFriend)="sendFriendRequest($event.username); selectedProfile = null">
   </app-friend-profile>
 </ng-template>
