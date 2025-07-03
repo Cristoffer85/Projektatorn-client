@@ -121,7 +121,13 @@ export class FriendComponent implements OnInit {
     this.friendshipService.respondToFriendRequest(requestId, accept).subscribe(() => {
       this.friendRequests = this.friendRequests.filter(r => r.requestId !== requestId);
       if (accept && this.username) {
-        this.friendshipService.getFriends(this.username).subscribe(friends => this.friends = friends);
+        this.friendshipService.getFriends(this.username).subscribe(friends => {
+          this.friends = friends;
+          // Update profile if open and matches
+          if (this.selectedProfile) {
+            this.selectedProfile.isFriend = this.isFriend(this.selectedProfile.username);
+          }
+        });
       }
     });
   }

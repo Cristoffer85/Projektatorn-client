@@ -23,12 +23,17 @@ Instead add
 
 8. Fix mail verification when changing mail in user update // Done commented out for now since cant get verification properly work with frontend - locally it works.
 
-9. When selected 2 projects from project-idea-wizard and clicked send make sure notification of "Projects sent!" appears as visual confirmation instead of "Selected Friends" button and after few seconds return to unselected friend again and "Selected Friends" button appear again (not usable until friend select again of course) 
+9. When sent request to friend request/withdraw appears correct in "All users" list for sending user -
+   But for receiving user - user who sent friend request appearing in both "Friend request" and "All users" making it able to send a friend request while have pending request. // Done
+
+
+10. When selected 2 projects from project-idea-wizard and clicked send make sure notification of "Projects sent!" appears as visual confirmation instead of "Selected Friends" button and after few seconds return to unselected friend again and "Selected Friends" button appear again (not usable until friend select again of course) 
 - //Done for receiver/friend
 --------------------------------------------------
-10. But not for sender/owner still doesnt work
+11. But not for sender/owner still doesnt work
 
-11. When sent request to friend request/withdraw appears correct in "All users" list for sending user -
-   But for receiving user - user who sent friend request appearing in both "Friend request" and "All users" making it able to send a friend request while have pending request.
+
+
 
 12. Bug one person changing avatar changes for other in navbar preview even though other value stored to database
+13. When clicked "Accept" from friend request the chatlist doesnt become immediately accessible, first after page refresh

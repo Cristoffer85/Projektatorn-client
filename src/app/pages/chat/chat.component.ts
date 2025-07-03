@@ -11,6 +11,7 @@ import { firstValueFrom } from 'rxjs';
 import { FriendProfileComponent } from '../friendprofile/friend-profile.component';
 import { removeBullet } from '../../utils/text-utils';
 import { ProjectProgressService } from '../../services/project.service';
+import { FriendshipService } from '../../services/friendship.service';
 
   interface ChatMessage {
     sender: any;
@@ -37,18 +38,24 @@ export class ChatComponent {
   selectedProfile: any = null;
   responses: { [messageIndex: number]: { [ideaIndex: number]: boolean|null } } = {};
   removeBullet = removeBullet;
-
   constructor(
     private chatService: ChatService,
     private unreadService: UnreadService,
     private auth: AuthService,
     private e2eeKeyService: E2eeKeyService,
     private e2eeCryptoService: E2eeCryptoService,
-    private projectProgress: ProjectProgressService
+    private projectProgress: ProjectProgressService,
+    private friendShipService: FriendshipService
   ) {}
 
   ngOnInit() {
     this.username = this.auth.getUsername();
+    if (this.username) {
+      // Replace with your actual service for fetching friends
+      this.friendShipService.getFriends(this.username).subscribe(friends => {
+        this.friends = friends;
+      });
+    }
   }
 
   async fetchHistory() {

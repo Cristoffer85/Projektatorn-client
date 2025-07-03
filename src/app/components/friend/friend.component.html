@@ -130,6 +130,7 @@
   <app-friend-profile
     *ngIf="!profileLoading && selectedProfile"
     [friend]="selectedProfile"
+    [isFriend]="selectedProfile.isFriend"
     (close)="selectedProfile = null"
     (remove)="removeFriend($event, $event)"
     (addFriend)="sendFriendRequest($event.username); selectedProfile = null">
