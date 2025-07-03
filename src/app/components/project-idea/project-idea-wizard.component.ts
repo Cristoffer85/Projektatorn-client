@@ -26,6 +26,7 @@ export class ProjectIdeaWizardComponent implements OnInit {
   selectedIdeas: number[] = [];
   friends: any[] = [];
   selectedFriends: string[] = [];
+  notificationSent = false;
   removeBullet = removeBullet;
 
   constructor(
@@ -143,7 +144,11 @@ export class ProjectIdeaWizardComponent implements OnInit {
         // Silently skip errors
       }
     }
-    this.selectedFriends = [];
+    this.notificationSent = true;
+    setTimeout(() => {
+      this.notificationSent = false;
+      this.selectedFriends = [];
+    }, 2000); // 2 seconds
   }
 
   saveWizardState() {

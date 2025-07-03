@@ -28,10 +28,9 @@ Instead add
 
 10. When clicked "Accept" from friend request the chatlist doesnt become immediately accessible, first after page refresh
 
-11. When selected 2 projects from project-idea-wizard and clicked send make sure notification of "Projects sent!" appears as visual confirmation instead of "Selected Friends" button and after few seconds return to unselected friend again and "Selected Friends" button appear again (not usable until friend select again of course) 
-- //Done for receiver/friend
 --------------------------------------------------
-11. But not for sender/owner still doesnt work
+11. When selected 2 projects from project-idea-wizard and clicked send make sure notification of "Projects sent!" appears as visual confirmation instead of "Selected Friends" button and after few seconds return to unselected friend again and "Selected Friends" button appear again (not usable until friend select again of course) 
 
+12. In chatcomponent - change the "Awaiting response from friend.." when project is accepted to "Project Accepted".
 
-12. Bug one person changing avatar changes for other in navbar preview even though other value stored to database
+13. Bug one person changing avatar changes for other in navbar preview even though other value stored to database

@@ -87,36 +87,41 @@
       </div>
 
       <div *ngIf="selectedIdeas.length === 2">
-        <div *ngIf="friends.length > 0; else noFriends">
-          <label class="form-label mt-3">Select friends to share these projects with:</label>
-          <div class="mb-2">
-            <div *ngFor="let friend of friends" class="form-check form-check-inline">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                [id]="'friend-' + friend.username"
-                [value]="friend.username"
-                (change)="toggleFriendSelection(friend.username)"
-                [checked]="selectedFriends.includes(friend.username)"
-              />
-              <label class="form-check-label" [for]="'friend-' + friend.username">
-                {{ friend.username }}
-              </label>
-            </div>
-          </div>
-          <button
-            class="btn btn-primary"
-            [disabled]="selectedFriends.length === 0"
-            (click)="sendIdeasToFriends()"
-          >
-            Send to Selected Friends
-          </button>
+        <div *ngIf="notificationSent" class="alert alert-success mt-3">
+          Projects sent!
         </div>
-        <ng-template #noFriends>
-          <div class="alert alert-warning mt-3">
-            Sign in (or up!) and find some good friends to share these good projects with!
+        <div *ngIf="!notificationSent">
+          <div *ngIf="friends.length > 0; else noFriends">
+            <label class="form-label mt-3">Select friends to share these projects with:</label>
+            <div class="mb-2">
+              <div *ngFor="let friend of friends" class="form-check form-check-inline">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  [id]="'friend-' + friend.username"
+                  [value]="friend.username"
+                  (change)="toggleFriendSelection(friend.username)"
+                  [checked]="selectedFriends.includes(friend.username)"
+                />
+                <label class="form-check-label" [for]="'friend-' + friend.username">
+                  {{ friend.username }}
+                </label>
+              </div>
+            </div>
+            <button
+              class="btn btn-primary"
+              [disabled]="selectedFriends.length === 0"
+              (click)="sendIdeasToFriends()"
+            >
+              Send to Selected Friends
+            </button>
           </div>
-        </ng-template>
+          <ng-template #noFriends>
+            <div class="alert alert-warning mt-3">
+              Sign in (or up!) and find some good friends to share these good projects with!
+            </div>
+          </ng-template>
+        </div>
       </div>
 
     </div>
