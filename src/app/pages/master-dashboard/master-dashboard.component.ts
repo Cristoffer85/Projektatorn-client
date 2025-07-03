@@ -35,6 +35,7 @@ export class FriendComponent implements OnInit {
   projectsInProgress: ProjectInProgress[] = [];
   expandedProjectIndex: number | null = null;
   removeBullet = removeBullet;
+  encodeURIComponent = encodeURIComponent;
 
   constructor(
     private friendshipService: FriendshipService,
