@@ -17,6 +17,7 @@ import { removeBullet } from '../../utils/text-utils';
   templateUrl: './friend.component.html'
 })
 export class FriendComponent implements OnInit {
+  @Output() friendsChanged = new EventEmitter<any[]>();
   @Output() friendSelected = new EventEmitter<any>();
   @Output() viewProfile = new EventEmitter<any>();
   @Output() friendRemoved = new EventEmitter<string>();
@@ -123,6 +124,7 @@ export class FriendComponent implements OnInit {
       if (accept && this.username) {
         this.friendshipService.getFriends(this.username).subscribe(friends => {
           this.friends = friends;
+              this.friendsChanged.emit(this.friends);
           // Update profile if open and matches
           if (this.selectedProfile) {
             this.selectedProfile.isFriend = this.isFriend(this.selectedProfile.username);

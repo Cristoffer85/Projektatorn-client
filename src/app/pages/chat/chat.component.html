@@ -2,12 +2,13 @@
   <div class="row">
     <div class="col-md-4">
       <ng-container *ngIf="!selectedProfile; else profileView">
-      <app-friend
-        [selectedFriend]="selectedFriend"
-        (friendSelected)="onFriendSelected($event)"
-        (viewProfile)="onViewProfile($event)"
-        (friendRemoved)="onFriendRemoved($event)">
-      </app-friend>
+        <app-friend
+          [selectedFriend]="selectedFriend"
+          (friendSelected)="onFriendSelected($event)"
+          (viewProfile)="onViewProfile($event)"
+          (friendRemoved)="onFriendRemoved($event)"
+          (friendsChanged)="onFriendsChanged($event)">
+        </app-friend>
       </ng-container>
       <ng-template #profileView>
         <app-friend-profile

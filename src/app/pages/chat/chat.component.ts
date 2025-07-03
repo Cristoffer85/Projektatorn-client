@@ -29,7 +29,7 @@ import { FriendshipService } from '../../services/friendship.service';
 
 export class ChatComponent {
   @Output() projectAccepted = new EventEmitter<{ friend: string, idea: string }>();
-  @Input() friends: any[] = [];
+  friends: any[] = [];
   messages: ChatMessage[] = [];
   newMessage: string = '';
   selectedFriend: any = null;
@@ -107,6 +107,10 @@ export class ChatComponent {
       this.responses[msgIdx] = {};
     }
     this.responses[msgIdx][ideaIndex] = accepted;
+  }
+
+  onFriendsChanged(friends: any[]) {
+    this.friends = friends;
   }
 
   allIdeasRespondedWithOneYesOneNo(message: any): boolean {
