@@ -37,3 +37,5 @@ Instead add
 --------------------------------------------------
 
 14. Bug one person changing avatar changes for other in navbar preview even though other value stored to database
+15. When pending projects moved to in progress dont get removed from database (its because they generate different id:s becuase theyre in different
+    collections in database. Find a fix for this later if feel like it.)
