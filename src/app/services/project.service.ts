@@ -17,22 +17,10 @@ export class ProjectProgressService {
 
   constructor(private http: HttpClient) {}
 
+  // ############## Regular Projects endpoints #####################
   loadProjects(username: string) {
     this.http.get<ProjectInProgress[]>(`${environment.apiUrl}/projects/load?username=${username}`)
       .subscribe(projects => this.projectsSubject.next(projects));
-  }
-
-  sendProjectToFriend(project: ProjectInProgress) {
-    // Store in pending collection first
-    return this.http.post<ProjectInProgress>(`${environment.apiUrl}/projects/pending`, project);
-  }
-
-  getPendingProjects(username: string) {
-    return this.http.get<ProjectInProgress[]>(`${environment.apiUrl}/projects/pending/${username}`);
-  }
-
-  removePendingProject(id: string) {
-    return this.http.delete(`${environment.apiUrl}/projects/pending/${id}`);
   }
 
   addProject(project: ProjectInProgress) {
@@ -49,5 +37,20 @@ export class ProjectProgressService {
         const current = this.projectsSubject.value.filter(p => p.id !== id);
         this.projectsSubject.next(current);
       });
+  }
+
+
+  // ##############Pending projects endpoints #####################
+  sendProjectToFriend(project: ProjectInProgress) {
+    // Store in pending collection first
+    return this.http.post<ProjectInProgress>(`${environment.apiUrl}/projects/pending`, project);
+  }
+
+  getPendingProjects(username: string) {
+    return this.http.get<ProjectInProgress[]>(`${environment.apiUrl}/projects/pending/${username}`);
+  }
+
+  removePendingProject(id: string) {
+    return this.http.delete(`${environment.apiUrl}/projects/pending/${id}`);
   }
 }
