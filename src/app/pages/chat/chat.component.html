@@ -71,20 +71,7 @@
                       Accept and Share project with Friend
                     </button>
                   </div>
-                  <!-- Show awaiting response only for sender and if not in progress -->
-                  <div *ngIf="isOwnMessage(message) && !isProjectInProgress(message)" class="mt-2">
-                    <button class="btn btn-secondary" disabled>
-                      Awaiting project response from friend...
-                    </button>
-                  </div>
-                  <!-- Show accepted message if project is in progress -->
-                  <div *ngIf="isProjectInProgress(message)" class="mt-2">
-                    <button class="btn btn-outline-success" disabled>
-                      Project accepted by both parts
-                      <span class="ms-2 text-success" style="font-size: 1.2em;">&#10003;</span>
-                      – start coding and having fun!
-                    </button>
-                  </div>
+
                 </div>
               </div>
             </ng-container>

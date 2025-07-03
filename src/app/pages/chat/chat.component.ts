@@ -81,16 +81,18 @@ export class ChatComponent {
             // Detect project idea message (simple check: multiple lines separated by double newlines)
             const isProjectIdeas = decrypted.includes('\n\n');
             if (isProjectIdeas) {
-              return {
-                sender: msg.sender,
-                ideas: decrypted.split('\n\n'),
-                isProjectIdeas: true
-              };
-            } else {
-              return {
-                sender: msg.sender,
-                text: decrypted,
-                isProjectIdeas: false
+            return {
+              id: msg.id, 
+              sender: msg.sender,
+              ideas: decrypted.split('\n\n'),
+              isProjectIdeas: true
+            };
+          } else {
+            return {
+              id: msg.id,
+              sender: msg.sender,
+              text: decrypted,
+              isProjectIdeas: false
               };
             }
           } catch (e) {
@@ -201,11 +203,28 @@ export class ChatComponent {
     const yesIndex = Object.entries(responses).find(([idx, val]) => val === true)?.[0];
     if (yesIndex !== undefined) {
       const acceptedIdea = message.ideas[+yesIndex];
+      // 1. Add to in-progress
       this.projectProgress.addProject({
         friend: this.username!,
         idea: acceptedIdea,
         owner: message.sender
       });
+      // 2. Remove from pending (if you have the pending project id)
+      if (message.pendingId) {
+        this.projectProgress.removePendingProject(message.pendingId).subscribe(() => {
+          this.messages.splice(msgIdx, 1);
+          delete this.responses[msgIdx];
+        });
+      } else if (message.id) {
+        // fallback if id is present
+        this.chatService.deleteMessage(message.id).subscribe(() => {
+          this.messages.splice(msgIdx, 1);
+          delete this.responses[msgIdx];
+        });
+      } else {
+        this.messages.splice(msgIdx, 1);
+        delete this.responses[msgIdx];
+      }
     }
   }
 

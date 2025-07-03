@@ -23,7 +23,16 @@ export class ProjectProgressService {
   }
 
   sendProjectToFriend(project: ProjectInProgress) {
-    return this.http.post<ProjectInProgress>(`${environment.apiUrl}/projects/send-to-friend`, project);
+    // Store in pending collection first
+    return this.http.post<ProjectInProgress>(`${environment.apiUrl}/projects/pending`, project);
+  }
+
+  getPendingProjects(username: string) {
+    return this.http.get<ProjectInProgress[]>(`${environment.apiUrl}/projects/pending/${username}`);
+  }
+
+  removePendingProject(id: string) {
+    return this.http.delete(`${environment.apiUrl}/projects/pending/${id}`);
   }
 
   addProject(project: ProjectInProgress) {
