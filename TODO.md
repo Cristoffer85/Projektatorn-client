@@ -36,19 +36,21 @@ Instead add
 
 14. Make password requirement stronger  // Done
 
+15. Nice up actual project description sent in mail (tried switching from javamail sender package to mimemessage package instead - supposedly support even further features)
+
+16. Add something to Projects in progress for a project, like what is happening now? 
+    - link to github?   // Done
+    - link to linkedin? // Done
 --------------------------------------------------
-15. Bug one person changing avatar changes for other in navbar preview even though other value stored to database
-16. When pending projects moved to in progress dont get removed from database (its because they generate different id:s becuase theyre in different
-    collections in database. Find a fix for this later if feel like it.)
 
-17. Add something to Projects in progress for a project, like what is happening now? 
-    - add link to github
-    - after started repo on github able to manually add url from github repo...?
-
-    - share links somewhere, to linkedin?
-    - after done use the history endpoint in frontend service already present to save to database. Make able to click that
-
-18. Nice up actual project description sent in mail
-
-19. Friend +
+17. Friend +
     Chat components are the largest. Try to refactor and break these down into smaller pieces.
+
+18. After started repo on github - able to manually go back to projektatorn and manually add url from github repo there...?
+
+19. After project done/remove button used - use the history endpoint from backend (already present in frontend service now) to save to database. Display in userpage history for viewing like a personal little "history/achievement"-repo.
+
+20. Bug one person changing avatar changes for other in navbar preview even though other value stored to database
+
+21. When pending projects moved to in progress dont get removed from database (its because they generate different id:s becuase theyre in different
+    collections in database. Find a fix for this later if feel like it.)
