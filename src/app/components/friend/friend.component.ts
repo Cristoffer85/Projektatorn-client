@@ -7,7 +7,7 @@ import { ChatService } from '../../services/chat.service';
 import { AuthService } from '../../auth/auth.service';
 import { UnreadService } from '../../services/unread.service';
 import { forkJoin } from 'rxjs';
-import { ProjectInProgress, ProjectProgressService } from '../../services/projectprogress.service';
+import { ProjectInProgress, ProjectProgressService } from '../../services/project.service';
 import { removeBullet } from '../../utils/text-utils';
 
 @Component({

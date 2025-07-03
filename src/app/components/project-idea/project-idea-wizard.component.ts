@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ProjectIdeaService } from '../../services/project.idea.service';
+import { ProjectIdeaService } from '../../services/api.service';
 import { FriendshipService } from '../../services/friendship.service';
 import { AuthService } from '../../auth/auth.service';
 import { ChatService } from '../../services/chat.service';

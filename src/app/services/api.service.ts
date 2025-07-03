@@ -8,6 +8,6 @@ export class ProjectIdeaService {
   constructor(private http: HttpClient) {}
 
   getIdeas(params: { type: string, languages: string, length: string }): Observable<string[]> {
-    return this.http.post<string[]>(`${environment.apiUrl}/api/project-ideas`, params);
+    return this.http.post<string[]>(`${environment.apiUrl}/api/googlegemini`, params);
   }
 }

@@ -10,7 +10,7 @@ import { E2eeCryptoService } from '../../services/e2ee/e2eecrypto.service';
 import { firstValueFrom } from 'rxjs';
 import { FriendProfileComponent } from '../friendprofile/friend-profile.component';
 import { removeBullet } from '../../utils/text-utils';
-import { ProjectProgressService } from '../../services/projectprogress.service';
+import { ProjectProgressService } from '../../services/project.service';
 
   interface ChatMessage {
     sender: any;

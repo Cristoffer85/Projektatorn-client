@@ -18,12 +18,12 @@ export class ProjectProgressService {
   constructor(private http: HttpClient) {}
 
   loadProjects(username: string) {
-    this.http.get<ProjectInProgress[]>(`${environment.apiUrl}/projects-in-progress/load?username=${username}`)
+    this.http.get<ProjectInProgress[]>(`${environment.apiUrl}/projects/load?username=${username}`)
       .subscribe(projects => this.projectsSubject.next(projects));
   }
 
   addProject(project: ProjectInProgress) {
-    this.http.post<ProjectInProgress>(`${environment.apiUrl}/projects-in-progress/add`, project)
+    this.http.post<ProjectInProgress>(`${environment.apiUrl}/projects/add`, project)
       .subscribe(saved => {
         const current = this.projectsSubject.value;
         this.projectsSubject.next([...current, saved]);
@@ -31,7 +31,7 @@ export class ProjectProgressService {
   }
 
   removeProject(id: string) {
-    this.http.delete(`${environment.apiUrl}/projects-in-progress/remove/${id}`)
+    this.http.delete(`${environment.apiUrl}/projects/remove/${id}`)
       .subscribe(() => {
         const current = this.projectsSubject.value.filter(p => p.id !== id);
         this.projectsSubject.next(current);
