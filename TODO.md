@@ -37,4 +37,3 @@ Instead add
 --------------------------------------------------
 
 14. Bug one person changing avatar changes for other in navbar preview even though other value stored to database
-15. Fix so pending projects get removed from database once accepted (right now it doesnt work because they are separate collections == hence generating separate id:s)
