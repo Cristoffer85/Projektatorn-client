@@ -113,7 +113,9 @@ export class ProjectIdeaWizardComponent implements OnInit {
 
   async sendIdeasToFriends() {
     if (this.selectedFriends.length === 0) return;
-    const ideasToSend = this.selectedIdeas.map(i => this.ideas[i]).join('\n\n');
+    const paramsHeader = 
+      `Type: ${this.type}\nLanguages: ${this.languages}\nLength: ${this.length} weeks\n`;
+    const ideasToSend = paramsHeader + '\n' + this.selectedIdeas.map(i => this.ideas[i]).join('\n\n');
     const sender = this.auth.getUsername();
 
     for (const friendUsername of this.selectedFriends) {

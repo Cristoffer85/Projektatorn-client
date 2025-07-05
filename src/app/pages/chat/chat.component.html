@@ -22,14 +22,22 @@
       <h5 *ngIf="selectedFriend">Chat with {{ selectedFriend.username || selectedFriend }}</h5>
       <div *ngIf="messages.length > 0; else noMessages">
         <div class="border rounded p-2 my-1">
-          <div *ngFor="let message of messages" class="mb-2">
-            <ng-container *ngIf="message.isProjectIdeas; else normalMessage">
-              <div class="card border-primary mb-3">
-                <div class="card-header bg-primary text-white">
-                  {{ isOwnMessage(message) ? 'You sent these project ideas:' : message.sender + ' sent you project ideas:' }}
-                </div>
-                <div class="card-body">
-                  <div *ngFor="let idea of message.ideas; let i = index" class="mb-3">
+
+<div *ngFor="let message of messages" class="mb-2">
+  <ng-container *ngIf="message.isProjectIdeas; else normalMessage">
+    <div class="card border-primary mb-3">
+      <div class="card-header bg-primary text-white">
+        {{ isOwnMessage(message) ? 'You sent these project ideas:' : message.sender + ' sent you project ideas:' }}
+      </div>
+      <div class="card-body">
+        <!-- Show project params if present -->
+        <div *ngIf="message.params" class="mb-2 text-muted small">
+          <div>Type: {{ message.params.type }}</div>
+          <div>Languages: {{ message.params.languages }}</div>
+          <div>Length: {{ message.params.length }} weeks</div>
+        </div>
+        <div *ngFor="let idea of message.ideas; let i = index" class="mb-3">
+
                     <div class="card">
                       <div
                         class="card-header bg-dark text-white fw-bold"

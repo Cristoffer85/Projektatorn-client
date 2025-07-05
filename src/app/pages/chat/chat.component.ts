@@ -13,12 +13,13 @@ import { removeBullet } from '../../utils/text-utils';
 import { ProjectProgressService } from '../../services/project.service';
 import { FriendshipService } from '../../services/friendship.service';
 
-  interface ChatMessage {
-    sender: any;
-    isProjectIdeas: boolean;
-    text?: string;
-    ideas?: string[];
-  }
+interface ChatMessage {
+  sender: any;
+  isProjectIdeas: boolean;
+  text?: string;
+  ideas?: string[];
+  params?: { type: string; languages: string; length: string } | null; 
+}
 
 @Component({
   selector: 'app-chat',
@@ -81,13 +82,27 @@ export class ChatComponent {
             // Detect project idea message (simple check: multiple lines separated by double newlines)
             const isProjectIdeas = decrypted.includes('\n\n');
             if (isProjectIdeas) {
-            return {
-              id: msg.id, 
-              sender: msg.sender,
-              ideas: decrypted.split('\n\n'),
-              isProjectIdeas: true
-            };
-          } else {
+              // Extract params if present at the top
+              const paramMatch = decrypted.match(/^Type:.*\nLanguages:.*\nLength:.*\n/);
+              let params = null;
+              let ideasText = decrypted;
+              if (paramMatch) {
+                const [typeLine, langLine, lengthLine] = paramMatch[0].trim().split('\n');
+                params = {
+                  type: typeLine.replace('Type:', '').trim(),
+                  languages: langLine.replace('Languages:', '').trim(),
+                  length: lengthLine.replace('Length:', '').replace('weeks', '').trim()
+                };
+                ideasText = decrypted.slice(paramMatch[0].length).trim();
+              }
+              return {
+                id: msg.id, 
+                sender: msg.sender,
+                ideas: ideasText.split('\n\n'),
+                isProjectIdeas: true,
+                params
+              };
+            } else {
             return {
               id: msg.id,
               sender: msg.sender,
