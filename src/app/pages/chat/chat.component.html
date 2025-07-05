@@ -27,7 +27,7 @@
   <ng-container *ngIf="message.isProjectIdeas; else normalMessage">
     <div class="card border-primary mb-3">
       <div class="card-header bg-primary text-white">
-        {{ isOwnMessage(message) ? 'You sent these project ideas (await friend response..):' : message.sender + ' sent you project ideas (select 1 "Yes" and 1 "No"):' }}
+        {{ isOwnMessage(message) ? 'You sent these project ideas (await friend response...)' : message.sender + ' sent you project ideas (select 1 "Yes" and 1 "No")' }}
       </div>
       <div class="card-body">
         <!-- Show project params if present -->
