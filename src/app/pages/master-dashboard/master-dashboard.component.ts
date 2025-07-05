@@ -178,11 +178,17 @@ export class FriendComponent implements OnInit {
     this.friendSelected.emit(friend);
   }
 
-  onProjectAccepted(event: { friend: string, idea: string }) {
+  onProjectAccepted(event: { friend: string, idea: string, params?: { type: string, languages: string, length: string } }) {
     if (!this.username) return;
+    let ideaWithParams = event.idea;
+    if (event.params) {
+      ideaWithParams =
+        `Type: ${event.params.type}\nLanguages: ${event.params.languages}\nLength: ${event.params.length} weeks\n\n` +
+        event.idea;
+    }
     this.projectProgress.addProject({
       friend: event.friend,
-      idea: event.idea,
+      idea: ideaWithParams,
       owner: this.username
     });
   }

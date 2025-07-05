@@ -218,10 +218,17 @@ export class ChatComponent {
     const yesIndex = Object.entries(responses).find(([idx, val]) => val === true)?.[0];
     if (yesIndex !== undefined) {
       const acceptedIdea = message.ideas[+yesIndex];
+      // Prepend params if present
+      let ideaWithParams = acceptedIdea;
+      if (message.params) {
+        ideaWithParams =
+          `Type: ${message.params.type}\nLanguages: ${message.params.languages}\nLength: ${message.params.length} weeks\n\n` +
+          acceptedIdea;
+      }
       // 1. Add to in-progress
       this.projectProgress.addProject({
         friend: this.username!,
-        idea: acceptedIdea,
+        idea: ideaWithParams,
         owner: message.sender
       });
       // 2. Remove from pending (if you have the pending project id)
