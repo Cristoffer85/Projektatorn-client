@@ -135,6 +135,18 @@ export class FriendComponent implements OnInit {
     });
   }
 
+  extractParams(idea: string): { type?: string, languages?: string, length?: string } {
+    const match = idea.match(/^Type:\s*(.*?)\s*[\r\n]+Languages:\s*(.*?)\s*[\r\n]+Length:\s*(.*?)\s*weeks?/i);
+    if (match) {
+      return {
+        type: match[1],
+        languages: match[2],
+        length: match[3]
+      };
+    }
+    return {};
+  }
+
   withdrawFriendRequest(username: string) {
     if (!this.username) return;
     this.friendshipService.withdrawFriendRequest(this.username, username).subscribe(() => {

@@ -32,9 +32,9 @@
       <div class="card-body">
         <!-- Show project params if present -->
         <div *ngIf="message.params" class="mb-2 text-muted small">
-          <div>Type: {{ message.params.type }}</div>
-          <div>Languages: {{ message.params.languages }}</div>
-          <div>Length: {{ message.params.length }} weeks</div>
+          <div>Type: <b>{{ message.params.type }}</b></div>
+          <div>Languages: <b>{{ message.params.languages }}</b></div>
+          <div>Length: <b>{{ message.params.length }} weeks</b></div>
         </div>
         <div *ngFor="let idea of message.ideas; let i = index" class="mb-3">
 
