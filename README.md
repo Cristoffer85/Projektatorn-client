@@ -1,59 +1,35 @@
-# ProjektatornClient
+# Projektatorn - Realtime generator of projects (in computer programming) for you and your friends!
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.9.
+## Description
+Client application using Angular 19.2 and Bootstrap for Projektatorn - an application for generating realtime projects for you and friends  coupled to programming. Using pre-prompted Google Gemini AI-API to generate ideas and send back so you can choose which ideas you want to send to your friends all structured in a little better flow. Chat with your friends to discuss all the while everything is securely E2E-encrypted (nothing can be read by server or in-between) Links to share and start project on Github of course included at end.
 
-## Development server
+## Features
+- Generate realtime programming ideas on mainpage
+- Create user (password securely encrypted through RSA256bit) email verification required through smtp
+- Sign in and update useraccount page with info and custom avatars
+- View all current users and their profile information
+- Send friend request to user - reciever can either choose to accept or reject
+- If atleast two users are friends one of users can send project ideas to friend which receiver in chat can choose 1 of two projects to accept. When one is chosen it can "Accept and Share" with friend and once done it moves to a Project in Progress column inside chatcomponent.
+- Owner of project can handle project - and both users can either share to Github and/or LinkedIn for actually starting the repo together in for example Github Projects.
 
-To start a local development server, run:
+## Installation
+Copy repository to local device and open application in IDE.  
+Use ng serve in app root to view.  
+Port currently set to http://localhost:4300
 
-```bash
-ng serve
-```
+## Usage
+Main use is for brainstorming ideas on what projects you - together with your friends can use to make programming ideas - mainly by cooperating together and dusting off teamworking skills, which is a highly good skill working in a company where you are very rarely alone (and also same applies for the rest of the world)   
 
-Once the server is running, open your browser and navigate to `http://localhost:4300/`. The application will automatically reload whenever you modify any of the source files.
+You can never solve all problems alone hence why teamwork is the dreamwork!
 
-## Code scaffolding
+## Credits
+Classmates from school, Myself, my Family, mighty duck rubber duck.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## License
+🏆 MIT License
 
-```bash
-ng generate component component-name
-```
+## Badges
+![badmath](https://img.shields.io/badge/Angular-100%25-blue)
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+## Tests
+No tests yet implemented.
