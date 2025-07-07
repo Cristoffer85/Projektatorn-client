@@ -112,13 +112,6 @@
 
             <div class="card-body" *ngIf="expandedProjectIndex === i">
 
-            <div *ngIf="removeBullet(proj.idea).includes(':')">
-              {{ removeBullet(proj.idea.split(':').slice(1).join(':').trim()) }}
-            </div>
-            <div *ngIf="!removeBullet(proj.idea).includes(':')">
-              {{ removeBullet(proj.idea) }}
-            </div>
-
               <div>
                 {{ extractDescription(proj.idea) }}
               </div>
