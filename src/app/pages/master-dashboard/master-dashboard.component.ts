@@ -135,18 +135,6 @@ export class FriendComponent implements OnInit {
     });
   }
 
-  extractParams(idea: string): { type?: string, languages?: string, length?: string } {
-    const match = idea.match(/^Type:\s*(.*?)\s*[\r\n]+Languages:\s*(.*?)\s*[\r\n]+Length:\s*(.*?)\s*weeks?/i);
-    if (match) {
-      return {
-        type: match[1],
-        languages: match[2],
-        length: match[3]
-      };
-    }
-    return {};
-  }
-
   withdrawFriendRequest(username: string) {
     if (!this.username) return;
     this.friendshipService.withdrawFriendRequest(this.username, username).subscribe(() => {
@@ -195,5 +183,58 @@ export class FriendComponent implements OnInit {
 
   removeProject(id: string) {
     this.projectProgress.removeProject(id);
+  }
+
+  // ################ Card idea extraction methods ################
+  extractParams(idea: string): { type?: string, languages?: string, length?: string } {
+    const match = idea.match(/^Type:\s*(.*?)\s*[\r\n]+Languages:\s*(.*?)\s*[\r\n]+Length:\s*(.*?)\s*weeks?/i);
+    if (match) {
+      return {
+        type: match[1],
+        languages: match[2],
+        length: match[3]
+      };
+    }
+    return {};
+  }
+
+  extractIdeaBody(idea: string): string {
+    // Remove params header if present
+    const paramsHeader = idea.match(/^Type:.*\nLanguages:.*\nLength:.*\n\n/i);
+    if (paramsHeader) {
+      return idea.slice(paramsHeader[0].length);
+    }
+    return idea;
+  }
+
+  extractTitle(idea: string): string {
+    const body = this.extractIdeaBody(idea).trim();
+    if (body.startsWith('**')) {
+      // Markdown bold title
+      const endIdx = body.indexOf('**:', 2);
+      if (endIdx !== -1) {
+        return body.slice(2, endIdx).trim();
+      }
+      const colonIdx = body.indexOf(':');
+      if (colonIdx !== -1) {
+        return body.slice(2, colonIdx).trim();
+      }
+    }
+    // Fallback: take text before colon
+    const colonIdx = body.indexOf(':');
+    if (colonIdx !== -1) {
+      return body.slice(0, colonIdx).trim();
+    }
+    return body.split('\n')[0].trim();
+  }
+
+  extractDescription(idea: string): string {
+    const body = this.extractIdeaBody(idea).trim();
+    // Remove title
+    const colonIdx = body.indexOf(':');
+    if (colonIdx !== -1) {
+      return body.slice(colonIdx + 1).trim();
+    }
+    return body;
   }
 }
