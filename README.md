@@ -1,7 +1,9 @@
 # Projektatorn - Realtime generator of projects (in computer programming) for you and your friends!
 
 ## Description
-Client application using Angular 19.2 and Bootstrap for Projektatorn - an application for generating realtime projects for you and friends  coupled to programming. Using pre-prompted Google Gemini AI-API to generate ideas and send back so you can choose which ideas you want to send to your friends all structured in a little better flow. Chat with your friends to discuss all the while everything is securely E2E-encrypted (nothing can be read by server or in-between) Links to share and start project on Github of course included at end.
+Client application using Angular 19.2 and Bootstrap for Projektatorn - an application for generating realtime projects for you and friends  coupled to programming. Using pre-prompted Google Gemini AI-API to generate ideas and send back so you can choose which ideas you want to send to your friends all structured in a little better flow. Chat with your friends to discuss all the while everything is securely E2E-encrypted (nothing can be read by server or in-between) Links to share and start project on Github of course included at end.   
+
+[[Public] Server repository](https://github.com/Cristoffer85/Projektatorn-server)
 
 ## Features
 - Generate realtime programming ideas on mainpage
