@@ -12,6 +12,7 @@ import { FriendProfileComponent } from '../friendprofile/friend-profile.componen
 import { removeBullet } from '../../utils/text-utils';
 import { ProjectProgressService } from '../../services/project.service';
 import { FriendshipService } from '../../services/friendship.service';
+import { MessageListComponent } from './message-list/message-list.component';
 
 interface ChatMessage {
   sender: any;
@@ -24,7 +25,7 @@ interface ChatMessage {
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule, FriendComponent, FriendProfileComponent],
+  imports: [CommonModule, FormsModule, FriendComponent, FriendProfileComponent, MessageListComponent],
   templateUrl: './chat.component.html'
 })
 
@@ -52,7 +53,6 @@ export class ChatComponent {
   ngOnInit() {
     this.username = this.auth.getUsername();
     if (this.username) {
-      // Replace with your actual service for fetching friends
       this.friendShipService.getFriends(this.username).subscribe(friends => {
         this.friends = friends;
       });
@@ -128,21 +128,6 @@ export class ChatComponent {
 
   onFriendsChanged(friends: any[]) {
     this.friends = friends;
-  }
-
-  allIdeasRespondedWithOneYesOneNo(message: any): boolean {
-    const msgIdx = this.messages.indexOf(message);
-    const resp = this.responses[msgIdx];
-    if (!resp) return false;
-    const values = Object.values(resp);
-    if (values.length !== message.ideas.length) return false;
-    const yesCount = values.filter(v => v === true).length;
-    const noCount = values.filter(v => v === false).length;
-    return yesCount === 1 && noCount === 1;
-  }
-
-  isOwnMessage(message: any): boolean {
-    return message.sender === this.username;
   }
 
   onFriendSelected(friend: any) {

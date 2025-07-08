@@ -2,6 +2,7 @@
   <div class="row">
     <div class="col-md-4">
       <ng-container *ngIf="!selectedProfile; else profileView">
+
         <app-friend
           [selectedFriend]="selectedFriend"
           (friendSelected)="onFriendSelected($event)"
@@ -9,91 +10,30 @@
           (friendRemoved)="onFriendRemoved($event)"
           (friendsChanged)="onFriendsChanged($event)">
         </app-friend>
+
       </ng-container>
       <ng-template #profileView>
+
         <app-friend-profile
           [friend]="selectedProfile"
           (close)="selectedProfile = null">
         </app-friend-profile>
+
       </ng-template>
     </div>
 
     <div class="col-md-8">
       <h5 *ngIf="selectedFriend">Chat with {{ selectedFriend.username || selectedFriend }}</h5>
-      <div *ngIf="messages.length > 0; else noMessages">
-        <div class="border rounded p-2 my-1">
+      
+        <app-message-list
+          [messages]="messages"
+          [username]="username"
+          [responses]="responses"
+          [removeBullet]="removeBullet"
+          (ideaResponse)="onIdeaResponse($event.message, $event.ideaIndex, $event.accepted)"
+          (acceptAndShare)="acceptAndShareProject($event)">
+        </app-message-list>
 
-<div *ngFor="let message of messages" class="mb-2">
-  <ng-container *ngIf="message.isProjectIdeas; else normalMessage">
-    <div class="card border-primary mb-3">
-      <div class="card-header bg-primary text-white">
-        {{ isOwnMessage(message) ? 'You sent these project ideas (await friend response...)' : message.sender + ' sent you project ideas (select 1 "Yes" and 1 "No")' }}
-      </div>
-      <div class="card-body">
-        <!-- Show project params if present -->
-        <div *ngIf="message.params" class="mb-2 text-muted small">
-          <div>Type: <b>{{ message.params.type }}</b></div>
-          <div>Languages: <b>{{ message.params.languages }}</b></div>
-          <div>Length: <b>{{ message.params.length }} weeks</b></div>
-        </div>
-        <div *ngFor="let idea of message.ideas; let i = index" class="mb-3">
-
-                    <div class="card">
-                      <div
-                        class="card-header bg-dark text-white fw-bold"
-                        *ngIf="removeBullet(idea).includes(':')"
-                        style="border-bottom: none;"
-                      >
-                        {{ removeBullet(idea.split(':')[0]).toUpperCase() }}
-                      </div>
-                      <div class="card-body">
-                        <div *ngIf="removeBullet(idea).includes(':')">
-                          {{ removeBullet(idea.split(':').slice(1).join(':').trim()) }}
-                        </div>
-                        <div *ngIf="!removeBullet(idea).includes(':')">
-                          {{ removeBullet(idea) }}
-                        </div>
-                        <!-- Only show Yes/No if project not in progress -->
-                        <div class="mt-2" *ngIf="!isOwnMessage(message)">
-                          <button
-                            class="btn btn-success btn-sm me-2"
-                            [disabled]="responses[messages.indexOf(message)]?.[i] === true"
-                            (click)="onIdeaResponse(message, i, true)">
-                            Yes
-                          </button>
-                          <button
-                            class="btn btn-danger btn-sm"
-                            [disabled]="responses[messages.indexOf(message)]?.[i] === false"
-                            (click)="onIdeaResponse(message, i, false)">
-                            No
-                          </button>
-                          <span *ngIf="responses[messages.indexOf(message)]?.[i] === true" class="text-success ms-2">You selected Yes</span>
-                          <span *ngIf="responses[messages.indexOf(message)]?.[i] === false" class="text-danger ms-2">You selected No</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- Show Accept/Share button only for receiver -->
-                  <div *ngIf="!isOwnMessage(message) && allIdeasRespondedWithOneYesOneNo(message)" class="mt-2">
-                    <button class="btn btn-primary" (click)="acceptAndShareProject(message)">
-                      Accept and Share project with Friend
-                    </button>
-                  </div>
-
-                </div>
-              </div>
-            </ng-container>
-
-            <ng-template #normalMessage>
-              <strong>{{ message.sender }}:</strong>
-              <span>{{ message.text }}</span>
-            </ng-template>
-          </div>
-        </div>
-      </div>
-      <ng-template #noMessages>
-        <p class="text-muted">Select friend in list to view messages.</p>
-      </ng-template>
         <form
           class="d-flex mt-3"
           (ngSubmit)="sendMessage()"
