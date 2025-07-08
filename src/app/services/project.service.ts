@@ -41,7 +41,6 @@ export class ProjectProgressService {
 
   // ############# Pending project endpoints #############
   sendProjectToFriend(project: ProjectInProgress) {
-    // Store in pending collection first
     return this.http.post<ProjectInProgress>(`${environment.apiUrl}/projects/pending`, project);
   }
 
